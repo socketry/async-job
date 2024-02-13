@@ -1,7 +1,7 @@
-require "async/job/version"
+# frozen_string_literal: true
 
-module Async
-  module Job
-    
-  end
-end
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
+
+require_relative 'job/version'
+require_relative 'job/backend/redis/server'
