@@ -29,11 +29,11 @@ module Async
 						@move = @client.script(:load, MOVE)
 					end
 					
-					def start(ready_queue, parent: Async::Task.current)
+					def start(ready_queue, resolution: 10, parent: Async::Task.current)
 						parent.async do
 							while true
 								move(destination: ready_queue.key)
-								sleep(1)
+								sleep(resolution)
 							end
 						end
 					end

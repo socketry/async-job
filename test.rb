@@ -12,7 +12,10 @@ Async do
 	server = Async::Job::Backend::Redis::Server.new(client, "async:job")
 	
 	server_task = Async do
-		server.start
+		server.start do |job|
+			puts "Performing job: #{job.id}"
+			job.call
+		end
 	end
 	
 	10.times do
