@@ -6,6 +6,8 @@ Provides an asynchronous job server.
 
 ## Usage
 
+The current implementation is incomplete, but with `redis` running on localhost, you can run several instances of `client.rb` and `server.rb` to show the general operation.
+
 ## Contributing
 
 We welcome contributions to this project.
