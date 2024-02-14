@@ -7,7 +7,7 @@ module Async
 	module Job
 		module Backend
 			module Redis
-				class ProcessingState
+				class ProcessingQueue
 					REQUEUE = <<~LUA
 						local cursor = "0"
 						local count = 0
@@ -40,28 +40,52 @@ module Async
 						return count
 					LUA
 					
-					def initialize(client, key, id)
+					RETRY = <<~LUA
+						redis.call('LREM', KEYS[1], 1, ARGV[1])
+						redis.call('LPUSH', KEYS[2], ARGV[1])
+					LUA
+					
+					COMPLETE = <<~LUA
+						redis.call('LREM', KEYS[1], 1, ARGV[1])
+						redis.call('HDEL', KEYS[2], ARGV[1])
+					LUA
+					
+					def initialize(client, key, id, ready_queue, job_store)
 						@client = client
 						@key = key
 						@id = id
+						
+						@ready_queue = ready_queue
+						@job_store = job_store
 						
 						@pending_key = "#{@key}:#{@id}:pending"
 						@heartbeat_key = "#{@key}:#{@id}"
 						
 						@requeue = @client.script(:load, REQUEUE)
+						@retry = @client.script(:load, RETRY)
+						@complete = @client.script(:load, COMPLETE)
 					end
 					
 					attr :key
 					
-					def fetch(ready_queue)
-						@client.brpoplpush(ready_queue.key, @pending_key, 0)
+					def fetch
+						Console.info(self, "Fetching job...")
+						id = @client.brpoplpush(@ready_queue.key, @pending_key, 0)
+						Console.info(self, "Fetching job: #{id}")
+						return id
 					end
 					
 					def complete(id)
-						@client.lrem(@pending_key, 1, id)
+						Console.info(self, "Completing job: #{id}")
+						@client.evalsha(@complete, 2, @pending_key, @job_store.key, id)
 					end
 					
-					def start(ready_queue, delay: 5, factor: 2, parent: Async::Task.current)
+					def retry(id)
+						Console.warn(self, "Retrying job: #{id}")
+						@client.evalsha(@retry, 2, @pending_key, @ready_queue.key, id)
+					end
+					
+					def start(delay: 5, factor: 2, parent: Async::Task.current)
 						heartbeat_key = "#{@key}:#{@id}"
 						
 						start_time = Time.now.to_f
@@ -72,7 +96,7 @@ module Async
 								@client.set(heartbeat_key, JSON.dump(uptime: uptime), seconds: delay*factor)
 								
 								# Requeue any jobs that have been abandoned:
-								count = @client.evalsha(@requeue, 2, @key, ready_queue.key)
+								count = @client.evalsha(@requeue, 2, @key, @ready_queue.key)
 								if count > 0
 									Console.warn(self, "Requeued #{count} abandoned jobs.")
 								end

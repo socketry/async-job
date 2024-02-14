@@ -40,8 +40,8 @@ module Async
 					
 					attr :key
 					
-					def add(job, jobs)
-						@client.evalsha(@add, 2, jobs.key, @key, job.id, job.serialize, job.perform_at.to_f)
+					def add(job, job_store)
+						@client.evalsha(@add, 2, job_store.key, @key, job.id, job.serialize, job.perform_at.to_f)
 					end
 					
 					def move(destination:, now: Time.now.to_i)

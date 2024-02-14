@@ -4,5 +4,4 @@
 /.covered.db
 /external
 
-# rspec failure tracking
-.rspec_status
+/dump.rdb
