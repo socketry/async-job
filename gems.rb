@@ -7,6 +7,8 @@ source "https://rubygems.org"
 
 gemspec
 
+gem "activejob", ">= 7.1"
+
 group :test do
 	gem "sus"
 	gem "covered"

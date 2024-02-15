@@ -37,13 +37,11 @@ module Async
 					end
 					
 					def enqueue(job)
-						if perform_at = job.perform_at and perform_at > Time.now.to_f
-							# If the job is delayed, add it to the delayed queue:
-							@delayed_queue.add(job, @job_store)
-						else
-							# If the job is ready to be processed now, add it to the ready queue:
-							@ready_queue.add(job, @job_store)
-						end
+						@ready_queue.add(job, @job_store)
+					end
+					
+					def schedule(job, timestamp)
+						@delayed_queue.add(job, timestamp, @job_store)
 					end
 					
 					def each(&block)

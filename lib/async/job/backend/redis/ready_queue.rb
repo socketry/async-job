@@ -23,7 +23,11 @@ module Async
 					attr :key
 					
 					def add(job, job_store)
-						@client.evalsha(@add, 2, job_store.key, @key, job.id, job.serialize)
+						id = SecureRandom.uuid
+						
+						@client.evalsha(@add, 2, job_store.key, @key, id, job)
+						
+						return id
 					end
 				end
 			end

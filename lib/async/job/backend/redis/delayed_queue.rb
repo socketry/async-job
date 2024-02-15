@@ -40,8 +40,12 @@ module Async
 					
 					attr :key
 					
-					def add(job, job_store)
-						@client.evalsha(@add, 2, job_store.key, @key, job.id, job.serialize, job.perform_at.to_f)
+					def add(job, timestamp, job_store)
+						id = SecureRandom.uuid
+						
+						@client.evalsha(@add, 2, job_store.key, @key, id, job, timestamp.to_f)
+						
+						return id
 					end
 					
 					def move(destination:, now: Time.now.to_i)
