@@ -19,6 +19,7 @@ module Async
 						if #jobs > 0 then
 							redis.call('LPUSH', KEYS[2], unpack(jobs))
 						end
+						return #jobs
 					LUA
 					
 					def initialize(client, key)
@@ -30,9 +31,16 @@ module Async
 					end
 					
 					def start(ready_queue, resolution: 10, parent: Async::Task.current)
+						Console.info(self, "Starting delayed queue...")
 						parent.async do
 							while true
-								move(destination: ready_queue.key)
+								Console.debug(self, "Checking for delayed jobs...")
+								count = move(destination: ready_queue.key)
+								
+								if count > 0
+									Console.info(self, "Moved #{count} delayed jobs to ready queue.")
+								end
+								
 								sleep(resolution)
 							end
 						end

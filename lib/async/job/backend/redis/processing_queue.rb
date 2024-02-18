@@ -87,8 +87,9 @@ module Async
 					
 					def start(delay: 5, factor: 2, parent: Async::Task.current)
 						heartbeat_key = "#{@key}:#{@id}"
-						
 						start_time = Time.now.to_f
+						
+						Console.info(self, "Starting processing queue...", key: @key, id: @id, heartbeat_key: heartbeat_key, delay: delay, factor: factor)
 						
 						parent.async do
 							while true

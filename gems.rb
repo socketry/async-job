@@ -13,6 +13,8 @@ group :test do
 	gem "sus"
 	gem "covered"
 	
+	gem 'sus-fixtures-async'
+	
 	gem "bake-test"
 	gem "bake-test-external"
 end

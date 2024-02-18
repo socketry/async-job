@@ -4,21 +4,27 @@ module Async
 	module Job
 		module Adapter
 			class ActiveJob
-				def initialize(server)
+				def initialize(server, coder = JSON)
 					@server = server
+					@coder = coder
 				end
 				
-				def enqueue(job) # :nodoc:
-					@server.enqueue(job.serialize)
+				def enqueue(job)
+					Console.info(self, "Enqueueing job...", id: job.job_id)
+					@server.enqueue(@coder.dump(job.serialize))
 				end
 				
 				def enqueue_at(job, timestamp)
-					@server.schedule(job.serialize, timestamp)
+					Console.info(self, "Enqueueing job at...", id: job.job_id, timestamp: timestamp)
+					@server.schedule(@coder.dump(job.serialize), timestamp)
 				end
 				
-				def perform(id, job)
-					@server.each do |id, job|
-						Base.execute(job)
+				def start
+					@server.start
+					
+					@server.each do |id, data|
+						job = @coder.parse(data)
+						::ActiveJob::Base.execute(job)
 					end
 				end
 			end

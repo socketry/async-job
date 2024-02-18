@@ -29,6 +29,7 @@ module Async
 					end
 					
 					def start
+						Console.info(self, "Starting server...")
 						# Start the delayed queue, which will move jobs to the ready queue when they are ready:
 						@delayed_queue.start(@ready_queue)
 						
@@ -44,16 +45,21 @@ module Async
 						@delayed_queue.add(job, timestamp, @job_store)
 					end
 					
+					def process(&block)
+						id = @processing_queue.fetch
+						begin
+							job = @job_store.get(id)
+							yield id, job
+							@processing_queue.complete(id)
+						rescue => error
+							@processing_queue.retry(id)
+							raise
+						end
+					end
+					
 					def each(&block)
-						while id = @processing_queue.fetch
-							begin
-								job = @job_store.get(id)
-								yield id, job
-								@processing_queue.complete(id)
-							rescue => error
-								@processing_queue.retry(id)
-								raise
-							end
+						while true
+							process(&block)
 						end
 					end
 				end
