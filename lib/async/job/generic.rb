@@ -8,6 +8,7 @@ module Async
 		class Generic
 			def self.enqueue(...)
 				self.new(...).enqueue
+			end
 			
 			def initialize(id, perform_at: nil)
 				@id = id
@@ -27,9 +28,3 @@ module Async
 		end
 	end
 end
-
-
-server.enqueue(job)
-	-> job.serialize
-
-Server.enqueue(job)
