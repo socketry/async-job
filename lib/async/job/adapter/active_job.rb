@@ -20,11 +20,13 @@ module Async
 				end
 				
 				def start
-					@server.start
-					
-					@server.each do |id, data|
-						job = @coder.parse(data)
-						::ActiveJob::Base.execute(job)
+					Async do
+						@server.start
+						
+						@server.each do |id, data|
+							job = @coder.parse(data)
+							::ActiveJob::Base.execute(job)
+						end
 					end
 				end
 			end
