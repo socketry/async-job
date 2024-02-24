@@ -69,10 +69,7 @@ module Async
 					attr :key
 					
 					def fetch
-						Console.info(self, "Fetching job...")
-						id = @client.brpoplpush(@ready_queue.key, @pending_key, 0)
-						Console.info(self, "Fetching job: #{id}")
-						return id
+						@client.brpoplpush(@ready_queue.key, @pending_key, 0)
 					end
 					
 					def complete(id)
