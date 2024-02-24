@@ -4,4 +4,4 @@
 # Copyright, 2024, by Samuel Williams.
 
 require_relative 'job/version'
-require_relative 'job/backend/redis/server'
+require_relative 'job/backend'
