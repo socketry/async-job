@@ -9,25 +9,14 @@ require 'async/redis'
 require 'sus/fixtures/async/reactor_context'
 
 require 'async/job/buffer'
-require 'async/job/backend/redis'
+require 'async/job/backend/inline'
 
-describe Async::Job::Backend::Redis do
+describe Async::Job::Backend::Inline do
 	include Sus::Fixtures::Async::ReactorContext
 	
 	let(:buffer) {Async::Job::Buffer.new}
+	let(:server) {subject.new(buffer)}
 	
-	let(:client) {Async::Redis::Client.new}
-	let(:prefix) {"async:job:#{SecureRandom.hex(8)}"}
-	let(:server) {Async::Job::Backend::Redis::Server.new(buffer, client, prefix)}
-	
-	def before
-		super
-		
-		@server_task = Async do
-			server.start
-		end
-	end
-		
 	it "can schedule a job" do
 		server.enqueue("test job")
 		

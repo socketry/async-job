@@ -15,7 +15,9 @@ module Async
 		module Backend
 			module Redis
 				class Server
-					def initialize(client, prefix)
+					def initialize(handler, client, prefix)
+						@handler = handler
+						
 						@id = SecureRandom.uuid
 						@client = client
 						@prefix = prefix
@@ -35,6 +37,10 @@ module Async
 						
 						# Start the processing queue, which will move jobs to the ready queue when they are abandoned:
 						@processing_queue.start
+						
+						while true
+							self.dequeue
+						end
 					end
 					
 					def enqueue(job)
@@ -45,21 +51,17 @@ module Async
 						@delayed_queue.add(job, timestamp, @job_store)
 					end
 					
-					def process(&block)
+					protected
+					
+					def dequeue
 						id = @processing_queue.fetch
 						begin
 							job = @job_store.get(id)
-							yield id, job
+							@handler.call(job)
 							@processing_queue.complete(id)
 						rescue => error
 							@processing_queue.retry(id)
 							raise
-						end
-					end
-					
-					def each(&block)
-						while true
-							process(&block)
 						end
 					end
 				end
