@@ -10,9 +10,9 @@ module Async
 	module Job
 		module Backend
 			module Redis
-				def self.new(handler, endpoint: Async::Redis.local_endpoint, prefix: "async:job")
+				def self.new(handler, endpoint: Async::Redis.local_endpoint, **options)
 					client = Async::Redis::Client.new(endpoint)
-					return Server.new(handler, client, prefix)
+					return Server.new(handler, client, **options)
 				end
 			end
 		end

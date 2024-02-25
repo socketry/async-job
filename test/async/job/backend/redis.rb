@@ -18,7 +18,7 @@ describe Async::Job::Backend::Redis do
 	
 	let(:client) {Async::Redis::Client.new}
 	let(:prefix) {"async:job:#{SecureRandom.hex(8)}"}
-	let(:server) {Async::Job::Backend::Redis::Server.new(buffer, client, prefix)}
+	let(:server) {Async::Job::Backend::Redis::Server.new(buffer, client, prefix:)}
 	
 	def before
 		super
@@ -27,10 +27,12 @@ describe Async::Job::Backend::Redis do
 			server.start
 		end
 	end
-		
+	
+	let(:job) {{data: "test job"}}
+	
 	it "can schedule a job" do
-		server.enqueue("test job")
+		server.enqueue(job)
 		
-		expect(buffer.pop).to be == "test job"
+		expect(buffer.pop).to be == job
 	end
 end

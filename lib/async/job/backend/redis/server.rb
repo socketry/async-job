@@ -9,18 +9,20 @@ require_relative 'processing_queue'
 require_relative 'ready_queue'
 
 require 'securerandom'
+require_relative '../../coder'
 
 module Async
 	module Job
 		module Backend
 			module Redis
 				class Server
-					def initialize(handler, client, prefix)
+					def initialize(handler, client, prefix: 'async-job', coder: Coder::DEFAULT)
 						@handler = handler
 						
 						@id = SecureRandom.uuid
 						@client = client
 						@prefix = prefix
+						@coder = coder
 						
 						@job_store = JobStore.new(@client, "#{@prefix}:jobs")
 						
@@ -44,11 +46,13 @@ module Async
 					end
 					
 					def enqueue(job)
-						@ready_queue.add(job, @job_store)
-					end
-					
-					def schedule(job, timestamp)
-						@delayed_queue.add(job, timestamp, @job_store)
+						perform_at = job[:perform_at]
+						
+						if perform_at
+							@delayed_queue.add(@coder.dump(job), perform_at, @job_store)
+						else
+							@ready_queue.add(@coder.dump(job), @job_store)
+						end
 					end
 					
 					protected
@@ -56,7 +60,7 @@ module Async
 					def dequeue
 						id = @processing_queue.fetch
 						begin
-							job = @job_store.get(id)
+							job = @coder.load(@job_store.get(id))
 							@handler.call(job)
 							@processing_queue.complete(id)
 						rescue => error

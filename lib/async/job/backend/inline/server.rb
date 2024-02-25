@@ -13,14 +13,13 @@ module Async
 					end
 					
 					def enqueue(job)
+						perform_at = job[:perform_at]
+						
 						Async do
-							@handler.call(job)
-						end
-					end
-					
-					def schedule(job, timestamp)
-						Async do
-							sleep(timestamp - Time.now)
+							if perform_at
+								sleep(perform_at - Time.now)
+							end
+							
 							@handler.call(job)
 						end
 					end
