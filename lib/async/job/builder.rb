@@ -60,7 +60,7 @@ module Async
 				end
 				
 				if block_given?
-					producer = yield(producer)
+					producer = yield(producer) || producer
 				end
 				
 				return Pipeline.new(producer, consumer, @delegate)
