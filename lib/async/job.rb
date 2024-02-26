@@ -5,3 +5,4 @@
 
 require_relative 'job/version'
 require_relative 'job/backend'
+require_relative 'job/builder'
