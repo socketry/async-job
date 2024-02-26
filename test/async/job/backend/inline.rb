@@ -20,7 +20,7 @@ describe Async::Job::Backend::Inline do
 	let(:job) {{data: "test job"}}
 	
 	it "can schedule a job" do
-		server.enqueue(job)
+		server.call(job)
 		
 		expect(buffer.pop).to be == job
 	end

@@ -31,7 +31,7 @@ describe Async::Job::Backend::Redis do
 	let(:job) {{data: "test job"}}
 	
 	it "can schedule a job and have it processed immediately" do
-		server.enqueue(job)
+		server.call(job)
 		
 		expect(buffer.pop).to be == job
 	end
@@ -41,7 +41,7 @@ describe Async::Job::Backend::Redis do
 			now = Time.now
 			delayed_job = job.merge(scheduled_at: now + 1)
 			
-			server.enqueue(delayed_job)
+			server.call(delayed_job)
 			
 			expect(buffer.pop).to have_keys(
 				data: be == job[:data],

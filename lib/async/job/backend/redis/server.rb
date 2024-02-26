@@ -46,7 +46,7 @@ module Async
 						end
 					end
 					
-					def enqueue(job)
+					def call(job)
 						scheduled_at = Coder::Time(job[:scheduled_at])
 						
 						if scheduled_at
