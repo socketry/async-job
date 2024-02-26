@@ -56,7 +56,7 @@ module Async
 				
 				# We now construct the queue producer:
 				@enqueue.reverse_each do |middleware|
-					producer = middleware.new(queue)
+					producer = middleware.new(producer)
 				end
 				
 				if block_given?
