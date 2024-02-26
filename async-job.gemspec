@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
 	spec.signing_key = File.expand_path('~/.gem/release.pem')
 	
 	spec.metadata = {
-		"documentation_uri" => "https://socketry.github.io/async-job",
+		"documentation_uri" => "https://socketry.github.io/async-job/",
 	}
 	
 	spec.files = Dir['{lib}/**/*', '*.md', base: __dir__]

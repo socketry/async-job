@@ -6,7 +6,11 @@ Provides an asynchronous job server.
 
 ## Usage
 
-The current implementation is incomplete, but with `redis` running on localhost, you can run several instances of `client.rb` and `server.rb` to show the general operation.
+Please see the [project documentation](https://socketry.github.io/async-job/) for more details.
+
+  - [Getting Started](https://socketry.github.io/async-job/guides/getting-started/index) - This guide gives you an overview of the `async-job` gem and explains the core concepts.
+
+  - [Redis Backend](https://socketry.github.io/async-job/guides/redis-backend/index) - This guide gives a brief overview of the implementation of the Redis backend.
 
 ## Contributing
 
