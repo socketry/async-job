@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
 
 require 'async/job/coder'
 require 'async/job/coder/message_pack'
