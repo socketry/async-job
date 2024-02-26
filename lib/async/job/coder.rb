@@ -3,12 +3,12 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'coder/json'
+require 'json'
 
 module Async
 	module Job
 		module Coder
-			DEFAULT = JSON::DEFAULT
+			DEFAULT = JSON
 			
 			# Type-cast for time values. See <https://bugs.ruby-lang.org/issues/20298> for background.
 			# @parameter value [Time || Integer || String || nil]

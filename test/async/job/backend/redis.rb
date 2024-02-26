@@ -28,7 +28,7 @@ describe Async::Job::Backend::Redis do
 		end
 	end
 	
-	let(:job) {{data: "test job"}}
+	let(:job) {{"data" => "test job"}}
 	
 	it "can schedule a job and have it processed immediately" do
 		server.call(job)
@@ -44,7 +44,7 @@ describe Async::Job::Backend::Redis do
 			server.call(delayed_job)
 			
 			expect(buffer.pop).to have_keys(
-				data: be == job[:data],
+				"data" => be == job["data"],
 			)
 		end
 	end
