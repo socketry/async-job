@@ -10,13 +10,13 @@ module Async
 				self.new(...).enqueue
 			end
 			
-			def initialize(id, perform_at: nil)
+			def initialize(id, scheduled_at: nil)
 				@id = id
-				@perform_at = perform_at
+				@scheduled_at = scheduled_at
 			end
 			
 			attr :id
-			attr :perform_at
+			attr :scheduled_at
 			
 			def serialize
 				raise NotImplementedError

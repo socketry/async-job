@@ -3,6 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
+require_relative '../../coder'
+
 module Async
 	module Job
 		module Backend
@@ -13,11 +15,11 @@ module Async
 					end
 					
 					def enqueue(job)
-						perform_at = job[:perform_at]
+						scheduled_at = Coder::Time(job[:scheduled_at])
 						
 						Async do
-							if perform_at
-								sleep(perform_at - Time.now)
+							if scheduled_at
+								sleep(scheduled_at - Time.now)
 							end
 							
 							@handler.call(job)

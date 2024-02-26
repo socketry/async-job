@@ -9,7 +9,7 @@ require_relative 'lib/async/job'
 
 require 'securerandom'
 
-Job = Struct.new(:id, :perform_at, :serialize)
+Job = Struct.new(:id, :scheduled_at, :serialize)
 
 Async do
 	client = Async::Redis::Client.new
