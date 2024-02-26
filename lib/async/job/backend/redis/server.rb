@@ -16,8 +16,8 @@ module Async
 		module Backend
 			module Redis
 				class Server
-					def initialize(handler, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10)
-						@handler = handler
+					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10)
+						@delegate = delegate
 						
 						@id = SecureRandom.uuid
 						@client = client
@@ -62,7 +62,7 @@ module Async
 						id = @processing_queue.fetch
 						begin
 							job = @coder.load(@job_store.get(id))
-							@handler.call(job)
+							@delegate.call(job)
 							@processing_queue.complete(id)
 						rescue => error
 							@processing_queue.retry(id)

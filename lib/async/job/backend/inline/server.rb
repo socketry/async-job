@@ -10,8 +10,8 @@ module Async
 		module Backend
 			module Inline
 				class Server
-					def initialize(handler)
-						@handler = handler
+					def initialize(delegate)
+						@delegate = delegate
 					end
 					
 					def call(job)
@@ -22,7 +22,7 @@ module Async
 								sleep(scheduled_at - Time.now)
 							end
 							
-							@handler.call(job)
+							@delegate.call(job)
 						end
 					end
 				end

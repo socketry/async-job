@@ -9,8 +9,8 @@ module Async
 	module Job
 		module Backend
 			module Inline
-				def self.new(handler)
-					return Server.new(handler)
+				def self.new(delegate)
+					return Server.new(delegate)
 				end
 			end
 		end
