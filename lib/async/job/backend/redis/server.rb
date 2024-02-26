@@ -47,7 +47,7 @@ module Async
 					end
 					
 					def call(job)
-						scheduled_at = Coder::Time(job[:scheduled_at])
+						scheduled_at = Coder::Time(job["scheduled_at"])
 						
 						if scheduled_at
 							@delayed_queue.add(@coder.dump(job), scheduled_at, @job_store)

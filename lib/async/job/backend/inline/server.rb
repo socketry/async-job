@@ -15,7 +15,7 @@ module Async
 					end
 					
 					def call(job)
-						scheduled_at = Coder::Time(job[:scheduled_at])
+						scheduled_at = Coder::Time(job["scheduled_at"])
 						
 						Async do
 							if scheduled_at
