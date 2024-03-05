@@ -7,16 +7,17 @@ require_relative 'delayed_queue'
 require_relative 'job_store'
 require_relative 'processing_queue'
 require_relative 'ready_queue'
+require_relative '../../coder'
 
 require 'securerandom'
-require_relative '../../coder'
+require 'async/idler'
 
 module Async
 	module Job
 		module Backend
 			module Redis
 				class Server
-					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10)
+					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10, parent: nil)
 						@delegate = delegate
 						
 						@id = SecureRandom.uuid
@@ -31,6 +32,8 @@ module Async
 						@ready_queue = ReadyQueue.new(@client, "#{@prefix}:ready")
 						
 						@processing_queue = ProcessingQueue.new(@client, "#{@prefix}:processing", @id, @ready_queue, @job_store)
+						
+						@parent = parent || Async::Idler.new
 					end
 					
 					def start
@@ -42,7 +45,7 @@ module Async
 						@processing_queue.start
 						
 						while true
-							self.dequeue
+							self.dequeue(@parent)
 						end
 					end
 					
@@ -58,16 +61,21 @@ module Async
 					
 					protected
 					
-					def dequeue
-						id = @processing_queue.fetch
-						begin
+					def dequeue(parent)
+						_id = @processing_queue.fetch
+						
+						parent.async do
+							id = _id; _id = nil
+							
 							job = @coder.load(@job_store.get(id))
 							@delegate.call(job)
 							@processing_queue.complete(id)
 						rescue => error
 							@processing_queue.retry(id)
-							raise
+							Console.error(self, error)
 						end
+					ensure
+						@processing_queue.retry(_id) if _id
 					end
 				end
 			end

@@ -73,7 +73,7 @@ module Async
 					end
 					
 					def complete(id)
-						Console.info(self, "Completing job: #{id}")
+						# Console.debug(self, "Completing job: #{id}")
 						@client.evalsha(@complete, 2, @pending_key, @job_store.key, id)
 					end
 					

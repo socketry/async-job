@@ -10,6 +10,8 @@ require 'async/job/buffer'
 require 'sus/fixtures/async/reactor_context'
 
 describe Async::Job::Builder do
+	include Sus::Fixtures::Async::ReactorContext
+	
 	it "can build a simple inline pipeline" do
 		buffer = Async::Job::Buffer.new
 		
