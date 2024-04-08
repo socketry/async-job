@@ -7,7 +7,7 @@ This guide gives you an overview of the `async-job` gem and explains the core co
 Add the gem to your project:
 
 ``` shell
-$ bundle add async
+$ bundle add async-job
 ```
 
 ## Core Concepts
