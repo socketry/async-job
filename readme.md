@@ -12,6 +12,10 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
   - [Redis Backend](https://socketry.github.io/async-job/guides/redis-backend/index) - This guide gives a brief overview of the implementation of the Redis backend.
 
+## See Also
+
+  - [async-job-adapter-active\_job](https://github.com/socketry/async-job-adapter-active_job) - ActiveJob adapter for `async-job`.
+
 ## Contributing
 
 We welcome contributions to this project.
@@ -29,7 +33,3 @@ This project uses the [Developer Certificate of Origin](https://developercertifi
 ### Contributor Covenant
 
 This project is governed by the [Contributor Covenant](https://www.contributor-covenant.org/). All contributors and participants agree to abide by its terms.
-
-## See Also
-
-- [async-job-adapter-active_job](https://github.com/socketry/async-job-adapter-active_job) - ActiveJob adapter for `async-job`.

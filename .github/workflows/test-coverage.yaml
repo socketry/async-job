@@ -1,4 +1,4 @@
-name: Coverage
+name: Test Coverage
 
 on: [push, pull_request]
 
@@ -14,6 +14,14 @@ jobs:
     name: ${{matrix.ruby}} on ${{matrix.os}}
     runs-on: ${{matrix.os}}-latest
     
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        
+        ruby:
+          - "3.3"
+    
     services:
       redis:
         image: redis
@@ -26,14 +34,6 @@ jobs:
         ports:
           - 6379:6379
     
-    strategy:
-      matrix:
-        os:
-          - ubuntu
-        
-        ruby:
-          - "3.3"
-    
     steps:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
@@ -44,7 +44,7 @@ jobs:
     - name: Run tests
       timeout-minutes: 5
       run: bundle exec bake test
-
+    
     - uses: actions/upload-artifact@v3
       with:
         name: coverage-${{matrix.os}}-${{matrix.ruby}}
