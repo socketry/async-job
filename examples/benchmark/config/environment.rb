@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
+
 require 'rails'
 require 'active_job/railtie'
 require 'async/job/adapter/active_job/railtie'

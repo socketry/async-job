@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
+
 require_relative 'config/environment'
 
 start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)

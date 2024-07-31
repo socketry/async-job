@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
 	spec.version = Async::Job::VERSION
 	
 	spec.summary = "A asynchronous job queue for Ruby."
-	spec.authors = ["Samuel Williams"]
+	spec.authors = ["Samuel Williams", "Alexey Ivanov"]
 	spec.license = "MIT"
 	
 	spec.cert_chain  = ['release.cert']
@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
 	
 	spec.metadata = {
 		"documentation_uri" => "https://socketry.github.io/async-job/",
+		"source_code_uri" => "https://github.com/socketry/async-job",
 	}
 	
 	spec.files = Dir['{lib}/**/*', '*.md', base: __dir__]

@@ -14,14 +14,6 @@ jobs:
     name: ${{matrix.ruby}} on ${{matrix.os}}
     runs-on: ${{matrix.os}}-latest
     
-    strategy:
-      matrix:
-        os:
-          - ubuntu
-        
-        ruby:
-          - "3.3"
-    
     services:
       redis:
         image: redis
@@ -33,6 +25,14 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
+    
+    strategy:
+      matrix:
+        os:
+          - ubuntu
+        
+        ruby:
+          - "3.3"
     
     steps:
     - uses: actions/checkout@v4

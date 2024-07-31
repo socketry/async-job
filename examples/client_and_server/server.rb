@@ -2,6 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
+# Copyright, 2024, by Alexey Ivanov.
 
 require 'async'
 require 'async/redis'
