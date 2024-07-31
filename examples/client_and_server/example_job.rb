@@ -6,7 +6,7 @@
 require_relative 'base_job'
 
 class ExampleJob < BaseJob
-  def perform(message:)
-    puts message
-  end
+	def perform(message:)
+		puts message
+	end
 end

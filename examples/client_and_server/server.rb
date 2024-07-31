@@ -11,8 +11,8 @@ require_relative 'example_job'
 require 'securerandom'
 
 Sync do
-  client = Async::Redis::Client.new
-  server = Async::Job::Backend::Redis::Server.new(ExampleJob, client, prefix: "async:job")
-
+	client = Async::Redis::Client.new
+	server = Async::Job::Backend::Redis::Server.new(ExampleJob, client, prefix: "async:job")
+	
 	server.start
 end
