@@ -1,6 +1,11 @@
-require_relative '../../lib/async/job/generic'
+# frozen_string_literal: true
 
-class ExampleJob < Async::Job::Generic
+# Released under the MIT License.
+# Copyright, 2024, by Samuel Williams.
+
+require_relative 'base_job'
+
+class ExampleJob < BaseJob
   def perform(message:)
     puts message
   end

@@ -5,7 +5,7 @@
 
 require 'async'
 require 'async/redis'
-require_relative '../../lib/async/job'
+require 'async/job'
 require_relative 'example_job'
 
 require 'securerandom'
@@ -14,7 +14,7 @@ Async do
 	client = Async::Redis::Client.new
 	server = Async::Job::Backend::Redis::Server.new(nil, client, prefix: "async:job")
 
-	10.times do
+  5.times do
 		job = ExampleJob.new(SecureRandom.uuid, scheduled_at: Time.now, message: "Hello, World! #{SecureRandom.uuid}")
 		Console.info(server, "Enqueuing job: #{job.id} #{job.inspect}")
 		server.call(job)
