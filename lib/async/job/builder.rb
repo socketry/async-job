@@ -29,7 +29,7 @@ module Async
 			end
 			
 			def queue(queue, *arguments, **options)
-				# The delegate is the output side of the queue, e.g. a Queuedelegate or similar wrapper.
+				# The delegate is the output side of the queue, e.g. a Redis server delegate or similar wrapper.
 				# The queue itself is instantiated with the delegate.
 				@queue = ->(delegate){queue.new(delegate, *arguments, **options)}
 			end
@@ -52,7 +52,11 @@ module Async
 				end
 				
 				# We can now construct the queue with the delegate:
-				producer = consumer = @queue.call(delegate)
+				if @queue
+					producer = consumer = @queue.call(delegate)
+				else
+					producer = consumer = delegate
+				end
 				
 				# We now construct the queue producer:
 				@enqueue.reverse_each do |middleware|
