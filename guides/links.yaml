@@ -2,3 +2,5 @@ getting-started:
   order: 0
 redis-backend:
   order: 1
+aggregate-backend:
+  order: 2
