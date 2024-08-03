@@ -20,10 +20,8 @@ describe Async::Job::Backend::Redis do
 	let(:prefix) {"async:job:#{SecureRandom.hex(8)}"}
 	let(:server) {Async::Job::Backend::Redis::Server.new(buffer, client, prefix:, resolution: 1)}
 	
-	def before
-		super
-		
-		@server_task = Async do
+	before do
+		@server_task = Async(transient: true) do
 			server.start
 		end
 	end
