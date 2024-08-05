@@ -11,6 +11,8 @@ module Async
 					ADD = <<~LUA
 						redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
 						redis.call('LPUSH', KEYS[2], ARGV[1])
+						
+						return true
 					LUA
 					
 					def initialize(client, key)
