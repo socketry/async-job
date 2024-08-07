@@ -26,6 +26,8 @@ module Async
 							puts job.inspect
 							@delegate.call(job)
 						end
+					ensure
+						puts defer_stop: Async::Task.current.instance_variable_get(:@defer_stop)
 					end
 					
 					def run(task)
