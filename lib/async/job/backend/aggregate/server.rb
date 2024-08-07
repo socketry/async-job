@@ -23,12 +23,9 @@ module Async
 					def flush(jobs)
 						$stderr.puts "Flushing #{jobs.size} jobs..."
 						while job = jobs.shift
+							puts job.inspect
 							@delegate.call(job)
 						end
-					rescue => error
-						Console::Event::Failure.for(error).emit(self, "Could not flush #{jobs.size} jobs.")
-					ensure
-						$stderr.puts "Flushed jobs (#{$!})."
 					end
 					
 					def run(task)
@@ -42,22 +39,29 @@ module Async
 								@pending, @processing = @processing, @pending
 								
 								flush(@processing)
-							ensure
-								$stderr.puts "Exiting: #{$!}"
 							end
 						end
 					end
 					
 					def start!(parent: Async::Task.current)
-						@task ||= parent.async(transient: true) do |task|
+						return if @task
+						
+						# We are creating a task:
+						@task = true
+						
+						parent.async(transient: true) do |task|
+							@task = task
+							
 							run(task)
 						ensure
 							# Ensure that all jobs are flushed before we exit:
-							# flush(@pending)
-							# flush(@processing)
+							flush(@pending) if @pending.any?
+							flush(@processing) if @processing.any?
+							@task = nil
 						end
 					end
 					
+					# Latenc of this is low.
 					def call(job)
 						start!
 						
