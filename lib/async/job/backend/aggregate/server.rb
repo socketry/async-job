@@ -43,8 +43,11 @@ module Async
 						end
 					end
 					
-					def start!(parent: Async::Task.current)
-						return if @task
+					# Start the background processing task if it is not already running.
+					#
+					# @return [Boolean] true if the task was started, false if it was already running.
+					protected def start!(parent: Async::Task.current)
+						return false if @task
 						
 						# We are creating a task:
 						@task = true
@@ -59,14 +62,17 @@ module Async
 							flush(@processing) if @processing.any?
 							@task = nil
 						end
+						
+						return true
 					end
 					
-					# Latenc of this is low.
+					# Enqueue a job into the pending buffer.
+					#
+					# Start the background processing task if it is not already running.
 					def call(job)
-						start!
-						
 						@pending << job
-						@ready.signal
+						
+						start! or @ready.signal
 					end
 				end
 			end
