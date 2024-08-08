@@ -3,15 +3,13 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'aggregate/server'
+require_relative 'queue/inline'
 
 module Async
 	module Job
-		module Backend
-			module Aggregate
-				def self.new(delegate)
-					return Server.new(delegate)
-				end
+		module Queue
+			def self.new(queue: Inline, **options)
+				queue.new(**options)
 			end
 		end
 	end

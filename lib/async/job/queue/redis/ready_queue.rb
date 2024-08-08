@@ -5,7 +5,7 @@
 
 module Async
 	module Job
-		module Backend
+		module Queue
 			module Redis
 				class ReadyQueue
 					ADD = <<~LUA

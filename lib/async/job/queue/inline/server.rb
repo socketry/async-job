@@ -10,7 +10,7 @@ require 'async/idler'
 
 module Async
 	module Job
-		module Backend
+		module Queue
 			module Inline
 				class Server < Generic
 					def initialize(delegate, parent: nil)

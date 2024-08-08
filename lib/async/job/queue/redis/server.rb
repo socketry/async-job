@@ -15,7 +15,7 @@ require 'async/idler'
 
 module Async
 	module Job
-		module Backend
+		module Queue
 			module Redis
 				class Server < Generic
 					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10, parent: nil)

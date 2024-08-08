@@ -5,7 +5,7 @@
 
 module Async
 	module Job
-		module Backend
+		module Queue
 			class Generic
 				def initialize(delegate = nil)
 					@delegate = delegate

@@ -13,7 +13,7 @@ require 'securerandom'
 
 Sync do
 	client = Async::Redis::Client.new
-	server = Async::Job::Backend::Redis::Server.new(nil, client, prefix: "async:job")
+	server = Async::Job::Queue::Redis::Server.new(nil, client, prefix: "async:job")
 	
 	5.times do
 		job = ExampleJob.new(SecureRandom.uuid, scheduled_at: Time.now, message: "Hello, World! #{SecureRandom.uuid}")

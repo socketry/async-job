@@ -9,7 +9,7 @@ require 'console/event/failure'
 
 module Async
 	module Job
-		module Backend
+		module Queue
 			module Aggregate
 				class Server < Generic
 					def initialize(delegate, parent: nil)

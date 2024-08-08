@@ -3,13 +3,15 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'backend/redis'
+require_relative 'inline/server'
 
 module Async
 	module Job
-		module Backend
-			def self.new(backend: Async::Job::Backend::Redis, **options)
-				backend.new(**options)
+		module Queue
+			module Inline
+				def self.new(delegate)
+					return Server.new(delegate)
+				end
 			end
 		end
 	end

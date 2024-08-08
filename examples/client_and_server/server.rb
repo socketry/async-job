@@ -13,7 +13,7 @@ require 'securerandom'
 
 Sync do
 	client = Async::Redis::Client.new
-	server = Async::Job::Backend::Redis::Server.new(ExampleJob, client, prefix: "async:job")
+	server = Async::Job::Queue::Redis::Server.new(ExampleJob, client, prefix: "async:job")
 	
 	server.start
 end

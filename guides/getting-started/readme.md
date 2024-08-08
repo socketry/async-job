@@ -14,7 +14,7 @@ $ bundle add async-job
 
 `async-job` is a library for building asynchronous job queues.
 
-- Several included {ruby Async::Job::Backend} implementations for enqueueing and running jobs.
+- Several included {ruby Async::Job::Queue} implementations for enqueueing and running jobs.
 - Several supported {ruby Async::Job::Coder} implementations for encoding and decoding job payloads.
 - A {ruby Async::Job::Generic} class which describes the minimum required job interface.
 
@@ -45,7 +45,7 @@ You can use {ruby Async::Job::Builder} to create a pipeline that includes both t
 
 ```ruby
 require 'async/job'
-require 'async/job/backend/inline'
+require 'async/job/queue/inline'
 
 # This is how we execute a job from the queue:
 executor = proc do |job|
@@ -55,7 +55,7 @@ end
 # Create a simple inline pipeline:
 pipeline = Async::Job::Builder.build(executor) do
 	# We are going to use an inline queue which processes the job in the background using Async{}:
-	queue Async::Job::Backend::Inline
+	queue Async::Job::Queue::Inline
 end
 
 # Enqueue a job:
@@ -65,4 +65,4 @@ Async do
 end
 ```
 
-There are two queues included with the library: {ruby Async::Job::Backend::Inline} and {ruby Async::Job::Backend::Redis}. The inline queue is useful for testing and adjacent non-critical job execution, while the Redis queue is useful for robust and distributed job execution.
+There are two queues included with the library: {ruby Async::Job::Queue::Inline} and {ruby Async::Job::Queue::Redis}. The inline queue is useful for testing and adjacent non-critical job execution, while the Redis queue is useful for robust and distributed job execution.

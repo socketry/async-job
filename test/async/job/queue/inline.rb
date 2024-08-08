@@ -9,9 +9,9 @@ require 'async/redis'
 require 'sus/fixtures/async/reactor_context'
 
 require 'async/job/buffer'
-require 'async/job/backend/inline'
+require 'async/job/queue/inline'
 
-describe Async::Job::Backend::Inline do
+describe Async::Job::Queue::Inline do
 	include Sus::Fixtures::Async::ReactorContext
 	
 	let(:buffer) {Async::Job::Buffer.new}

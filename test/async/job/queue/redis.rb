@@ -9,16 +9,16 @@ require 'async/redis'
 require 'sus/fixtures/async/reactor_context'
 
 require 'async/job/buffer'
-require 'async/job/backend/redis'
+require 'async/job/queue/redis'
 
-describe Async::Job::Backend::Redis do
+describe Async::Job::Queue::Redis do
 	include Sus::Fixtures::Async::ReactorContext
 	
 	let(:buffer) {Async::Job::Buffer.new}
 	
 	let(:client) {Async::Redis::Client.new}
 	let(:prefix) {"async:job:#{SecureRandom.hex(8)}"}
-	let(:server) {Async::Job::Backend::Redis::Server.new(buffer, client, prefix:, resolution: 1)}
+	let(:server) {Async::Job::Queue::Redis::Server.new(buffer, client, prefix:, resolution: 1)}
 	
 	before do
 		@server_task = Async(transient: true) do

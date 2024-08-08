@@ -1,6 +1,6 @@
 getting-started:
   order: 0
-redis-backend:
+redis-queue:
   order: 1
-aggregate-backend:
+aggregate-queue:
   order: 2

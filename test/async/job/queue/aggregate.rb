@@ -9,9 +9,9 @@ require 'async/redis'
 require 'sus/fixtures/async/reactor_context'
 
 require 'async/job/buffer'
-require 'async/job/backend/aggregate'
+require 'async/job/queue/aggregate'
 
-class SlowBackend
+class SlowQueue
 	def initialize(delegate = nil)
 		@condition = Async::Condition.new
 		@delegate = delegate
@@ -33,7 +33,7 @@ class SlowBackend
 	end
 end
 
-describe Async::Job::Backend::Aggregate do
+describe Async::Job::Queue::Aggregate do
 	include Sus::Fixtures::Async::ReactorContext
 	
 	let(:buffer) {Async::Job::Buffer.new}
@@ -47,9 +47,9 @@ describe Async::Job::Backend::Aggregate do
 		expect(buffer.pop).to be == job
 	end
 	
-	with "slow backend" do
-		let(:backend) {SlowBackend.new(buffer)}
-		let(:server) {subject.new(backend)}
+	with "slow queue" do
+		let(:queue) {SlowQueue.new(buffer)}
+		let(:server) {subject.new(queue)}
 		
 		it "flushes jobs on shutdown" do
 			server.call(job)
@@ -58,7 +58,7 @@ describe Async::Job::Backend::Aggregate do
 			expect(buffer).to be(:empty?)
 			
 			# Allow job processing to continue:
-			backend.condition.signal
+			queue.condition.signal
 			
 			expect(buffer.pop).to be == job
 		end

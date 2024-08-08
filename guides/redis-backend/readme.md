@@ -1,10 +1,10 @@
-# Redis Backend
+# Redis Queue
 
-This guide gives a brief overview of the implementation of the Redis backend.
+This guide gives a brief overview of the implementation of the Redis queue.
 
 ## Overview
 
-The Redis backend plays a pivotal role in facilitating a sophisticated and reliable job queue architecture, designed to handle diverse processing needs with efficiency and resilience. The architecture is thoughtfully split into three distinct components, each serving a critical function in the lifecycle of a job: the ready queue, the delayed queue, and the processing queue.
+The Redis queue plays a pivotal role in facilitating a sophisticated and reliable job queue architecture, designed to handle diverse processing needs with efficiency and resilience. The architecture is thoughtfully split into three distinct components, each serving a critical function in the lifecycle of a job: the ready queue, the delayed queue, and the processing queue.
 
 ## Ready Queue
 
