@@ -74,6 +74,10 @@ module Async
 						
 						start! or @ready.signal
 					end
+					
+					def stop
+						@task&.stop
+					end
 				end
 			end
 		end
