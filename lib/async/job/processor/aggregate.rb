@@ -7,7 +7,7 @@ require_relative 'aggregate/server'
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Aggregate
 				def self.new(delegate)
 					return Server.new(delegate)

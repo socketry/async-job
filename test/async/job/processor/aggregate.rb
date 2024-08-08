@@ -9,7 +9,7 @@ require 'async/redis'
 require 'sus/fixtures/async/reactor_context'
 
 require 'async/job/buffer'
-require 'async/job/queue/aggregate'
+require 'async/job/processor/aggregate'
 
 class SlowQueue
 	def initialize(delegate = nil)
@@ -33,7 +33,7 @@ class SlowQueue
 	end
 end
 
-describe Async::Job::Queue::Aggregate do
+describe Async::Job::Processor::Aggregate do
 	include Sus::Fixtures::Async::ReactorContext
 	
 	let(:buffer) {Async::Job::Buffer.new}

@@ -8,7 +8,7 @@ require 'async/redis/client'
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
 				def self.new(delegate, endpoint: Async::Redis.local_endpoint, **options)
 					client = Async::Redis::Client.new(endpoint)

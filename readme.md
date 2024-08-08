@@ -10,7 +10,7 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
   - [Getting Started](https://socketry.github.io/async-job/guides/getting-started/index) - This guide gives you an overview of the `async-job` gem and explains the core concepts.
 
-  - [Redis Queue](https://socketry.github.io/async-job/guides/redis-queue/index) - This guide gives a brief overview of the implementation of the Redis queue.
+  - [Redis Processor](https://socketry.github.io/async-job/guides/redis-processor/index) - This guide gives a brief overview of the implementation of the Redis queue.
 
 ## See Also
 

@@ -5,15 +5,15 @@
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
-				class ProcessingQueue
-					REQUEUE = <<~LUA
+				class ProcessingList
+					REPROCESSOR = <<~LUA
 						local cursor = "0"
 						local count = 0
 						
 						repeat
-							-- Scan through all known server id -> job id mappings and requeue any jobs that have been abandoned:
+							-- Scan through all known server id -> job id mappings and reprocessor any jobs that have been abandoned:
 							local result = redis.call('SCAN', cursor, 'MATCH', KEYS[1]..':*:pending')
 							cursor = result[1]
 							for _, pending_key in pairs(result[2]) do
@@ -22,7 +22,7 @@ module Async
 								local state = redis.call('GET', server_key)
 								if state == false then
 									while true do
-										-- Requeue any pending jobs:
+										-- Reprocessor any pending jobs:
 										local result = redis.call('RPOPLPUSH', pending_key, KEYS[2])
 										
 										if result == false then
@@ -50,18 +50,18 @@ module Async
 						redis.call('HDEL', KEYS[2], ARGV[1])
 					LUA
 					
-					def initialize(client, key, id, ready_queue, job_store)
+					def initialize(client, key, id, ready_list, job_store)
 						@client = client
 						@key = key
 						@id = id
 						
-						@ready_queue = ready_queue
+						@ready_list = ready_list
 						@job_store = job_store
 						
 						@pending_key = "#{@key}:#{@id}:pending"
 						@heartbeat_key = "#{@key}:#{@id}"
 						
-						@requeue = @client.script(:load, REQUEUE)
+						@reprocessor = @client.script(:load, REPROCESSOR)
 						@retry = @client.script(:load, RETRY)
 						@complete = @client.script(:load, COMPLETE)
 					end
@@ -69,7 +69,7 @@ module Async
 					attr :key
 					
 					def fetch
-						@client.brpoplpush(@ready_queue.key, @pending_key, 0)
+						@client.brpoplpush(@ready_list.key, @pending_key, 0)
 					end
 					
 					def complete(id)
@@ -79,24 +79,24 @@ module Async
 					
 					def retry(id)
 						Console.warn(self, "Retrying job: #{id}")
-						@client.evalsha(@retry, 2, @pending_key, @ready_queue.key, id)
+						@client.evalsha(@retry, 2, @pending_key, @ready_list.key, id)
 					end
 					
 					def start(delay: 5, factor: 2, parent: Async::Task.current)
 						heartbeat_key = "#{@key}:#{@id}"
 						start_time = Time.now.to_f
 						
-						Console.info(self, "Starting processing queue...", key: @key, id: @id, heartbeat_key: heartbeat_key, delay: delay, factor: factor)
+						Console.info(self, "Starting processing processor...", key: @key, id: @id, heartbeat_key: heartbeat_key, delay: delay, factor: factor)
 						
 						parent.async do
 							while true
 								uptime = (Time.now.to_f - start_time).round(2)
 								@client.set(heartbeat_key, JSON.dump(uptime: uptime), seconds: delay*factor)
 								
-								# Requeue any jobs that have been abandoned:
-								count = @client.evalsha(@requeue, 2, @key, @ready_queue.key)
+								# Reprocessor any jobs that have been abandoned:
+								count = @client.evalsha(@reprocessor, 2, @key, @ready_list.key)
 								if count > 0
-									Console.warn(self, "Requeued #{count} abandoned jobs.")
+									Console.warn(self, "Reprocessord #{count} abandoned jobs.")
 								end
 								
 								sleep(delay)

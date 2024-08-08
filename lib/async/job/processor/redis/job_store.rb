@@ -5,7 +5,7 @@
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
 				class JobStore
 					def initialize(client, key)

@@ -3,15 +3,13 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'inline/server'
+require_relative 'processor/inline'
 
 module Async
 	module Job
-		module Queue
-			module Inline
-				def self.new(delegate)
-					return Server.new(delegate)
-				end
+		module Processor
+			def self.new(processor: Inline, **options)
+				processor.new(**options)
 			end
 		end
 	end

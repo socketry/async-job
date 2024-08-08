@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'delayed_queue'
+require_relative 'delayed_jobs'
 require_relative 'job_store'
-require_relative 'processing_queue'
-require_relative 'ready_queue'
+require_relative 'processing_list'
+require_relative 'ready_list'
 require_relative '../../coder'
 require_relative '../generic'
 
@@ -15,7 +15,7 @@ require 'async/idler'
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
 				class Server < Generic
 					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10, parent: nil)
@@ -28,11 +28,9 @@ module Async
 						@resolution = resolution
 						
 						@job_store = JobStore.new(@client, "#{@prefix}:jobs")
-						
-						@delayed_queue = DelayedQueue.new(@client, "#{@prefix}:delayed")
-						@ready_queue = ReadyQueue.new(@client, "#{@prefix}:ready")
-						
-						@processing_queue = ProcessingQueue.new(@client, "#{@prefix}:processing", @id, @ready_queue, @job_store)
+						@delayed_jobs = DelayedJobs.new(@client, "#{@prefix}:delayed")
+						@ready_list = ReadyList.new(@client, "#{@prefix}:ready")
+						@processing_list = ProcessingList.new(@client, "#{@prefix}:processing", @id, @ready_list, @job_store)
 						
 						@parent = parent || Async::Idler.new
 					end
@@ -56,11 +54,11 @@ module Async
 					def start
 						super
 						
-						# Start the delayed queue, which will move jobs to the ready queue when they are ready:
-						@delayed_queue.start(@ready_queue, resolution: @resolution)
+						# Start the delayed processor, which will move jobs to the ready processor when they are ready:
+						@delayed_jobs.start(@ready_list, resolution: @resolution)
 						
-						# Start the processing queue, which will move jobs to the ready queue when they are abandoned:
-						@processing_queue.start
+						# Start the processing processor, which will move jobs to the ready processor when they are abandoned:
+						@processing_list.start
 						
 						self.start!
 					end
@@ -75,29 +73,29 @@ module Async
 						scheduled_at = Coder::Time(job["scheduled_at"])
 						
 						if scheduled_at
-							@delayed_queue.add(@coder.dump(job), scheduled_at, @job_store)
+							@delayed_jobs.add(@coder.dump(job), scheduled_at, @job_store)
 						else
-							@ready_queue.add(@coder.dump(job), @job_store)
+							@ready_list.add(@coder.dump(job), @job_store)
 						end
 					end
 					
 					protected
 					
 					def dequeue(parent)
-						_id = @processing_queue.fetch
+						_id = @processing_list.fetch
 						
 						parent.async do
 							id = _id; _id = nil
 							
 							job = @coder.load(@job_store.get(id))
 							@delegate.call(job)
-							@processing_queue.complete(id)
+							@processing_list.complete(id)
 						rescue => error
-							@processing_queue.retry(id)
+							@processing_list.retry(id)
 							Console.error(self, error)
 						end
 					ensure
-						@processing_queue.retry(_id) if _id
+						@processing_list.retry(_id) if _id
 					end
 				end
 			end

@@ -4,7 +4,7 @@
 # Copyright, 2024, by Samuel Williams.
 
 require 'async/job/builder'
-require 'async/job/queue/inline'
+require 'async/job/processor/inline'
 require 'async/job/buffer'
 
 require 'sus/fixtures/async/reactor_context'
@@ -17,7 +17,7 @@ describe Async::Job::Builder do
 		
 		# Create a simple inline pipeline:
 		pipeline = Async::Job::Builder.build(buffer) do
-			queue Async::Job::Queue::Inline
+			enqueue Async::Job::Processor::Inline
 		end
 		
 		# Enqueue a job:

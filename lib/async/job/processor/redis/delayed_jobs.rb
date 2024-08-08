@@ -5,9 +5,9 @@
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
-				class DelayedQueue
+				class DelayedJobs
 					ADD = <<~LUA
 						redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
 						redis.call('ZADD', KEYS[2], ARGV[3], ARGV[1])
@@ -30,15 +30,15 @@ module Async
 						@move = @client.script(:load, MOVE)
 					end
 					
-					def start(ready_queue, resolution: 10, parent: Async::Task.current)
-						Console.info(self, "Starting delayed queue...")
+					def start(ready_list, resolution: 10, parent: Async::Task.current)
+						Console.info(self, "Starting delayed processor...")
 						parent.async do
 							while true
 								Console.debug(self, "Checking for delayed jobs...")
-								count = move(destination: ready_queue.key)
+								count = move(destination: ready_list.key)
 								
 								if count > 0
-									Console.info(self, "Moved #{count} delayed jobs to ready queue.")
+									Console.info(self, "Moved #{count} delayed jobs to ready processor.")
 								end
 								
 								sleep(resolution)

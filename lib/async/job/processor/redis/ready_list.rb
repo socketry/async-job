@@ -5,9 +5,9 @@
 
 module Async
 	module Job
-		module Queue
+		module Processor
 			module Redis
-				class ReadyQueue
+				class ReadyList
 					ADD = <<~LUA
 						redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
 						redis.call('LPUSH', KEYS[2], ARGV[1])

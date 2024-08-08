@@ -45,7 +45,7 @@ You can use {ruby Async::Job::Builder} to create a pipeline that includes both t
 
 ```ruby
 require 'async/job'
-require 'async/job/queue/inline'
+require 'async/job/processor/inline'
 
 # This is how we execute a job from the queue:
 executor = proc do |job|
