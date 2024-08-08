@@ -21,7 +21,6 @@ describe Async::Job::Backend::Aggregate do
 	
 	it "can schedule a job" do
 		server.call(job)
-		
 		expect(buffer.pop).to be == job
 	end
 end
