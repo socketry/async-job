@@ -28,34 +28,55 @@ module Async
 						Console::Event::Failure.for(error).emit(self, "Could not flush #{jobs.size} jobs.")
 					end
 					
-					def run
+					def run(task)
 						while true
 							while @pending.empty?
 								@ready.wait
 							end
 							
-							# Swap the buffers:
-							@pending, @processing = @processing, @pending
-							
-							flush(@processing)
+							task.defer_stop do
+								# Swap the buffers:
+								@pending, @processing = @processing, @pending
+								
+								flush(@processing)
+							end
 						end
 					end
 					
-					def start!(parent: Async::Task.current)
-						@task ||= parent.async(transient: true) do
-							run
+					# Start the background processing task if it is not already running.
+					#
+					# @return [Boolean] true if the task was started, false if it was already running.
+					protected def start!(parent: Async::Task.current)
+						return false if @task
+						
+						# We are creating a task:
+						@task = true
+						
+						parent.async(transient: true) do |task|
+							@task = task
+							
+							run(task)
 						ensure
 							# Ensure that all jobs are flushed before we exit:
-							flush(@pending)
-							flush(@processing)
+							flush(@pending) if @pending.any?
+							flush(@processing) if @processing.any?
+							@task = nil
 						end
+						
+						return true
 					end
 					
+					# Enqueue a job into the pending buffer.
+					#
+					# Start the background processing task if it is not already running.
 					def call(job)
-						start!
-						
 						@pending << job
-						@ready.signal
+						
+						start! or @ready.signal
+					end
+					
+					def stop
+						@task&.stop
 					end
 				end
 			end

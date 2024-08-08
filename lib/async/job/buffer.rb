@@ -13,6 +13,10 @@ module Async
 				@delegate = delegate
 			end
 			
+			def empty?
+				@jobs.empty?
+			end
+			
 			attr :jobs
 			
 			def call(job)
