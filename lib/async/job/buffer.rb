@@ -27,6 +27,14 @@ module Async
 			def pop
 				@jobs.dequeue
 			end
+			
+			def start
+				@delegate&.start
+			end
+			
+			def stop
+				@delegate&.stop
+			end
 		end
 	end
 end

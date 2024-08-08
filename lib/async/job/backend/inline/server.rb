@@ -30,6 +30,14 @@ module Async
 							Console.error(self, error)
 						end
 					end
+					
+					def start
+						@delegate&.start
+					end
+					
+					def stop
+						@delegate&.stop
+					end
 				end
 			end
 		end

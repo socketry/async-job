@@ -36,17 +36,37 @@ module Async
 						@parent = parent || Async::Idler.new
 					end
 					
+					def start!
+						return false if @task
+						
+						@task = true
+						
+						@parent.async(transient: true, annotation: self.class.name) do |task|
+							@task = task
+							
+							while true
+								self.dequeue(task)
+							end
+						ensure
+							@task = nil
+						end
+					end
+					
 					def start
-						Console.info(self, "Starting server...")
+						@delegate&.start
+						
 						# Start the delayed queue, which will move jobs to the ready queue when they are ready:
 						@delayed_queue.start(@ready_queue, resolution: @resolution)
 						
 						# Start the processing queue, which will move jobs to the ready queue when they are abandoned:
 						@processing_queue.start
 						
-						while true
-							self.dequeue(@parent)
-						end
+						self.start!
+					end
+					
+					def stop
+						@task&.stop
+						@delegate&.stop
 					end
 					
 					def call(job)

@@ -75,8 +75,14 @@ module Async
 						start! or @ready.signal
 					end
 					
+					def start
+						@delegate&.start
+						self.start!
+					end
+					
 					def stop
 						@task&.stop
+						@delegate&.stop
 					end
 				end
 			end

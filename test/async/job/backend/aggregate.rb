@@ -23,6 +23,14 @@ class SlowBackend
 		@condition.wait
 		@delegate&.call(job)
 	end
+	
+	def start
+		@delegate&.start
+	end
+	
+	def stop
+		@delegate&.stop
+	end
 end
 
 describe Async::Job::Backend::Aggregate do
