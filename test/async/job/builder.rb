@@ -21,7 +21,7 @@ describe Async::Job::Builder do
 		end
 		
 		# Enqueue a job:
-		pipeline.producer.call("My job")
+		pipeline.client.call("My job")
 		
 		expect(buffer.pop).to be == "My job"
 	end

@@ -6,7 +6,8 @@
 module Async
 	module Job
 		class Builder
-			Pipeline = Struct.new(:producer, :consumer, :delegate)
+			# A pipeline is a sequence of middleware that wraps a delegate. The client end of the pipeline is where jobs should be submitted. The server end of the middleware is where jobs are processed.
+			Pipeline = Struct.new(:client, :server, :delegate)
 			
 			def self.build(delegate = nil, &block)
 				builder = self.new(delegate)
@@ -16,6 +17,7 @@ module Async
 				return builder.build
 			end
 			
+			# @parameter delegate [Object] The initial delegate that will be wrapped by the queue.
 			def initialize(delegate = nil)
 				@enqueue = []
 				@dequeue = []
@@ -24,50 +26,47 @@ module Async
 				@queue = nil
 			end
 			
-			def enqueue(middleware)
-				@enqueue << middleware
+			def enqueue(middleware, ...)
+				@enqueue << ->(delegate){middleware.new(delegate, ...)}
 			end
 			
-			def queue(queue, *arguments, **options)
+			def queue(queue, ...)
 				# The delegate is the output side of the queue, e.g. a Redis server delegate or similar wrapper.
 				# The queue itself is instantiated with the delegate.
-				@queue = ->(delegate){queue.new(delegate, *arguments, **options)}
+				@queue = ->(delegate){queue.new(delegate, ...)}
 			end
 			
-			def dequeue(middleware)
-				@dequeue << middleware
+			def dequeue(middleware, ...)
+				@dequeue << ->(delegate){middleware.new(delegate, ...)}
 			end
 			
 			def delegate(delegate)
 				@delegate = delegate
 			end
 			
-			def build(&block)
-				# To construct the queue, we need the delegate.
-				delegate = @delegate
-				
+			def build(delegate = @delegate, &block)
 				# We then wrap the delegate with the middleware in reverse order:
 				@dequeue.reverse_each do |middleware|
-					delegate = middleware.new(delegate)
+					delegate = middleware.call(delegate)
 				end
 				
 				# We can now construct the queue with the delegate:
 				if @queue
-					producer = consumer = @queue.call(delegate)
+					client = server = @queue.call(delegate)
 				else
-					producer = consumer = delegate
+					client = server = delegate
 				end
 				
 				# We now construct the queue producer:
 				@enqueue.reverse_each do |middleware|
-					producer = middleware.new(producer)
+					client = middleware.call(client)
 				end
 				
 				if block_given?
-					producer = yield(producer) || producer
+					client = yield(client) || client
 				end
 				
-				return Pipeline.new(producer, consumer, @delegate)
+				return Pipeline.new(client, server, @delegate)
 			end
 		end
 	end

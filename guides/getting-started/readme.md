@@ -22,21 +22,21 @@ The `async-job` library provides a framework for enqueueing and dequeuing jobs, 
 
 ## Usage
 
-In general, a job processing system comprises two parts: a job producer and a job consumer. The producer enqueues jobs, and the consumer dequeues and processes them.
+In general, a job processing system pipeline comprises two parts: a client that submits jobs into a queue, and a server that reads jobs out of a queue and processes them.
 
 ```mermaid
 sequenceDiagram
-	participant A as Application
+	participant A as Client (Application)
 	participant ME as Middleware (Enqueue)
 	participant S as Server (Queue)
 	participant MD as Middleware (Dequeue)
-	participant H as Handler 
+	participant H as Delegate
 
-	Note over A,S: Producer
+	Note over A,S: Client
 	A->>+ME: Submit Job
 	ME->>+S: Enqueue Job
 
-	Note over S,H: Consumer
+	Note over S,H: Server
 	S->>+MD: Dequeue Job
 	MD->>+H: Execute Job
 ```
@@ -60,7 +60,7 @@ end
 
 # Enqueue a job:
 Async do
-	pipeline.producer.call("My job")
+	pipeline.client.call("My job")
 	# Prints "Processing job: My job"
 end
 ```
