@@ -52,14 +52,14 @@ module Async
 						# We are creating a task:
 						@task = true
 						
-						parent.async(transient: true) do |task|
+						parent.async(transient: true, annotation: self.class.name) do |task|
 							@task = task
 							
 							run(task)
 						ensure
 							# Ensure that all jobs are flushed before we exit:
-							flush(@pending) if @pending.any?
 							flush(@processing) if @processing.any?
+							flush(@pending) if @pending.any?
 							@task = nil
 						end
 						
