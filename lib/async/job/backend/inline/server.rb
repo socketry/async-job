@@ -4,6 +4,7 @@
 # Copyright, 2024, by Samuel Williams.
 
 require_relative '../../coder'
+require_relative '../generic'
 
 require 'async/idler'
 
@@ -11,9 +12,10 @@ module Async
 	module Job
 		module Backend
 			module Inline
-				class Server
+				class Server < Generic
 					def initialize(delegate, parent: nil)
-						@delegate = delegate
+						super(delegate)
+						
 						@parent = parent || Async::Idler.new
 					end
 					

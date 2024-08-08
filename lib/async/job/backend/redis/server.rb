@@ -8,6 +8,7 @@ require_relative 'job_store'
 require_relative 'processing_queue'
 require_relative 'ready_queue'
 require_relative '../../coder'
+require_relative '../generic'
 
 require 'securerandom'
 require 'async/idler'
@@ -16,9 +17,9 @@ module Async
 	module Job
 		module Backend
 			module Redis
-				class Server
+				class Server < Generic
 					def initialize(delegate, client, prefix: 'async-job', coder: Coder::DEFAULT, resolution: 10, parent: nil)
-						@delegate = delegate
+						super(delegate)
 						
 						@id = SecureRandom.uuid
 						@client = client
@@ -53,7 +54,7 @@ module Async
 					end
 					
 					def start
-						@delegate&.start
+						super
 						
 						# Start the delayed queue, which will move jobs to the ready queue when they are ready:
 						@delayed_queue.start(@ready_queue, resolution: @resolution)
@@ -66,7 +67,8 @@ module Async
 					
 					def stop
 						@task&.stop
-						@delegate&.stop
+						
+						super
 					end
 					
 					def call(job)

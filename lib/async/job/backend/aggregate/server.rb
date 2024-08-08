@@ -3,15 +3,17 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
+require_relative '../generic'
+
 require 'console/event/failure'
 
 module Async
 	module Job
 		module Backend
 			module Aggregate
-				class Server
+				class Server < Generic
 					def initialize(delegate, parent: nil)
-						@delegate = delegate
+						super(delegate)
 						
 						@task = nil
 						@ready = Async::Condition.new
@@ -76,13 +78,15 @@ module Async
 					end
 					
 					def start
-						@delegate&.start
+						super
+						
 						self.start!
 					end
 					
 					def stop
 						@task&.stop
-						@delegate&.stop
+						
+						super
 					end
 				end
 			end
