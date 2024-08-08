@@ -31,14 +31,12 @@ module Async
 					end
 					
 					def start(ready_list, resolution: 10, parent: Async::Task.current)
-						Console.info(self, "Starting delayed processor...")
 						parent.async do
 							while true
-								Console.debug(self, "Checking for delayed jobs...")
 								count = move(destination: ready_list.key)
 								
 								if count > 0
-									Console.info(self, "Moved #{count} delayed jobs to ready processor.")
+									Console.debug(self, "Moved #{count} delayed jobs to ready list.")
 								end
 								
 								sleep(resolution)

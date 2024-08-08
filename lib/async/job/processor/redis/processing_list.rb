@@ -8,12 +8,12 @@ module Async
 		module Processor
 			module Redis
 				class ProcessingList
-					REPROCESSOR = <<~LUA
+					REQUEUE = <<~LUA
 						local cursor = "0"
 						local count = 0
 						
 						repeat
-							-- Scan through all known server id -> job id mappings and reprocessor any jobs that have been abandoned:
+							-- Scan through all known server id -> job id mappings and requeue any jobs that have been abandoned:
 							local result = redis.call('SCAN', cursor, 'MATCH', KEYS[1]..':*:pending')
 							cursor = result[1]
 							for _, pending_key in pairs(result[2]) do
@@ -22,7 +22,7 @@ module Async
 								local state = redis.call('GET', server_key)
 								if state == false then
 									while true do
-										-- Reprocessor any pending jobs:
+										-- Requeue any pending jobs:
 										local result = redis.call('RPOPLPUSH', pending_key, KEYS[2])
 										
 										if result == false then
@@ -61,7 +61,7 @@ module Async
 						@pending_key = "#{@key}:#{@id}:pending"
 						@heartbeat_key = "#{@key}:#{@id}"
 						
-						@reprocessor = @client.script(:load, REPROCESSOR)
+						@requeue = @client.script(:load, REQUEUE)
 						@retry = @client.script(:load, RETRY)
 						@complete = @client.script(:load, COMPLETE)
 					end
@@ -86,17 +86,15 @@ module Async
 						heartbeat_key = "#{@key}:#{@id}"
 						start_time = Time.now.to_f
 						
-						Console.info(self, "Starting processing processor...", key: @key, id: @id, heartbeat_key: heartbeat_key, delay: delay, factor: factor)
-						
 						parent.async do
 							while true
 								uptime = (Time.now.to_f - start_time).round(2)
 								@client.set(heartbeat_key, JSON.dump(uptime: uptime), seconds: delay*factor)
 								
-								# Reprocessor any jobs that have been abandoned:
-								count = @client.evalsha(@reprocessor, 2, @key, @ready_list.key)
+								# REQUEUE any jobs that have been abandoned:
+								count = @client.evalsha(@requeue, 2, @key, @ready_list.key)
 								if count > 0
-									Console.warn(self, "Reprocessord #{count} abandoned jobs.")
+									Console.warn(self, "Requeued #{count} abandoned jobs.")
 								end
 								
 								sleep(delay)
