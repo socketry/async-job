@@ -24,6 +24,8 @@ module Async
 						while job = jobs.shift
 							@delegate.call(job)
 						end
+					rescue => error
+						Console::Event::Failure.for(error).emit(self, "Could not flush #{jobs.size} jobs.")
 					end
 					
 					def run(task)
