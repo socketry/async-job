@@ -73,7 +73,6 @@ module Async
 					end
 					
 					def complete(id)
-						# Console.debug(self, "Completing job: #{id}")
 						@client.evalsha(@complete, 2, @pending_key, @job_store.key, id)
 					end
 					
@@ -91,7 +90,7 @@ module Async
 								uptime = (Time.now.to_f - start_time).round(2)
 								@client.set(heartbeat_key, JSON.dump(uptime: uptime), seconds: delay*factor)
 								
-								# REQUEUE any jobs that have been abandoned:
+								# Requeue any jobs that have been abandoned:
 								count = @client.evalsha(@requeue, 2, @key, @ready_list.key)
 								if count > 0
 									Console.warn(self, "Requeued #{count} abandoned jobs.")

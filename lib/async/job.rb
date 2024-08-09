@@ -6,3 +6,4 @@
 require_relative 'job/version'
 require_relative 'job/queue'
 require_relative 'job/builder'
+require_relative 'job/buffer'
