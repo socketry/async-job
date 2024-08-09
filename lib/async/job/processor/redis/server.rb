@@ -92,7 +92,7 @@ module Async
 							@processing_list.complete(id)
 						rescue => error
 							Console::Event::Failure.for(error).emit(self, "Job failed with error!", id: id)
-							@processing_list.fail(id)
+							@processing_list.retry(id)
 						end
 					ensure
 						@processing_list.retry(_id) if _id
