@@ -81,6 +81,11 @@ module Async
 					
 					protected
 					
+					# Dequeue a job from the ready list and process it.
+					#
+					# If the job fails for any reason, it will be retried.
+					#
+					# If you do not desire this behavior, you should catch exceptions in the delegate.
 					def dequeue(parent)
 						_id = @processing_list.fetch
 						
