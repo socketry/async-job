@@ -40,7 +40,7 @@ module Async
 				@delegate = delegate
 			end
 			
-			def build(delegate = @delegate, &block)
+			def build(delegate = @delegate)
 				# We then wrap the delegate with the middleware in reverse order:
 				@dequeue.reverse_each do |middleware|
 					delegate = middleware.call(delegate)
@@ -51,10 +51,6 @@ module Async
 				# We now construct the queue producer:
 				@enqueue.reverse_each do |middleware|
 					client = middleware.call(client)
-				end
-				
-				if block_given?
-					client = yield(client) || client
 				end
 				
 				return Queue.new(client, server, @delegate)
