@@ -4,7 +4,6 @@
 # Copyright, 2024, by Samuel Williams.
 
 require 'async'
-require 'async/redis'
 
 require 'sus/fixtures/async/reactor_context'
 

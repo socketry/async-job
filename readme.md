@@ -10,10 +10,13 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
   - [Getting Started](https://socketry.github.io/async-job/guides/getting-started/index) - This guide gives you an overview of the `async-job` gem and explains the core concepts.
 
-  - [Redis Processor](https://socketry.github.io/async-job/guides/redis-processor/index) - This guide gives a brief overview of the implementation of the Redis queue.
+  - [Inline Queue](https://socketry.github.io/async-job/guides/inline-queue/index) - This guide explains how to use the Inline queue to execute background jobs.
+
+  - [Aggregate Queue](https://socketry.github.io/async-job/guides/aggregate-queue/index) - This guide explains how to use the Aggregate queue to reduce input latency and improve the performance of your application.
 
 ## See Also
 
+  - [async-job-processor-redis](https://github.com/socketry/async-job-processor-redis) - Redis processor for `async-job` (similar to Sidekiq).
   - [async-job-adapter-active\_job](https://github.com/socketry/async-job-adapter-active_job) - ActiveJob adapter for `async-job`.
 
 ## Contributing

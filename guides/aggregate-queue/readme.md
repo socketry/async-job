@@ -13,7 +13,7 @@ You can add the aggregate queue to an existing queue:
 ~~~ ruby
 pipeline = Async::Job::Builder.build(buffer) do
 	# Aggregating before passing the job into Redis will avoid Redis latency issues affecting the front-end:
-	queue Async::Job::Queue::Aggregate
-	queue Async::Job::Queue::Redis
+	enqueue Async::Job::Queue::Aggregate
+	dequeue Async::Job::Queue::Redis
 end
 ~~~

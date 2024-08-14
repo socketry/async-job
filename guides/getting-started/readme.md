@@ -65,4 +65,10 @@ Async do
 end
 ```
 
-There are two queues included with the library: {ruby Async::Job::Queue::Inline} and {ruby Async::Job::Queue::Redis}. The inline queue is useful for testing and adjacent non-critical job execution, while the Redis queue is useful for robust and distributed job execution.
+## Rails Integration
+
+You can use `async-job` with Rails's ActiveJob framework by using the `async-job-adapter-active_job` gem. This allows you to use `async-job` as a backend for ActiveJob, which is useful for integrating with existing Rails applications.
+
+### Redis Processor
+
+The `async-job-processor-redis` gem provides a Redis-based processor for `async-job`. This processor is similar to Sidekiq, and is designed to provide a similar interface and feature set.

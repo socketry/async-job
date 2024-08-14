@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
 	spec.name = "async-job"
 	spec.version = Async::Job::VERSION
 	
-	spec.summary = "A asynchronous job queue for Ruby."
+	spec.summary = "An asynchronous job queue for Ruby."
 	spec.authors = ["Samuel Williams", "Alexey Ivanov"]
 	spec.license = "MIT"
 	
@@ -23,5 +23,4 @@ Gem::Specification.new do |spec|
 	spec.required_ruby_version = ">= 3.1"
 	
 	spec.add_dependency "async", "~> 2.9"
-	spec.add_dependency "async-redis"
 end
