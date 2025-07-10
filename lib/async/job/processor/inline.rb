@@ -43,12 +43,12 @@ module Async
 				
 				# Start the processor by delegating to the configured delegate.
 				def start
-					@delegate&.start
+					@delegate.start
 				end
 				
 				# Stop the processor by delegating to the configured delegate.
 				def stop
-					@delegate&.stop
+					@delegate.stop
 				end
 			end
 		end

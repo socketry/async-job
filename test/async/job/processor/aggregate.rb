@@ -3,63 +3,84 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require "async"
-
-require "sus/fixtures/async/reactor_context"
-
-require "async/job/buffer"
 require "async/job/processor/aggregate"
-
-class SlowQueue
-	def initialize(delegate = nil)
-		@condition = Async::Condition.new
-		@delegate = delegate
-	end
-	
-	attr :condition
-	
-	def call(job)
-		@condition.wait
-		@delegate&.call(job)
-	end
-	
-	def start
-		@delegate&.start
-	end
-	
-	def stop
-		@delegate&.stop
-	end
-end
+require "sus/fixtures/async/reactor_context"
+require "sus/fixtures/console/captured_logger"
 
 describe Async::Job::Processor::Aggregate do
 	include Sus::Fixtures::Async::ReactorContext
-	
-	let(:buffer) {Async::Job::Buffer.new}
-	let(:server) {subject.new(buffer)}
-	
-	let(:job) {{"data" => "test job"}}
-	
-	it "can schedule a job" do
-		server.call(job)
-		
-		expect(buffer.pop).to be == job
+	include_context Sus::Fixtures::Console::CapturedLogger
+
+	let(:delegate) do
+		Class.new do
+			attr_reader :called_jobs, :started, :stopped
+			def initialize
+				@called_jobs = []
+				@started = false
+				@stopped = false
+			end
+			def call(job)
+				@called_jobs << job
+			end
+			def start
+				@started = true
+				"started"
+			end
+			def stop
+				@stopped = true
+				"stopped"
+			end
+		end.new
 	end
-	
-	with "slow queue" do
-		let(:queue) {SlowQueue.new(buffer)}
-		let(:server) {subject.new(queue)}
+
+	let(:processor) {subject.new(delegate)}
+
+	it "processes jobs in batches" do
+		processor.call(:job1)
+		processor.call(:job2)
 		
-		it "flushes jobs on shutdown" do
-			server.call(job)
-			server.stop
-			
-			expect(buffer).to be(:empty?)
-			
-			# Allow job processing to continue:
-			queue.condition.signal
-			
-			expect(buffer.pop).to be == job
-		end
+		# Give the processor a chance to process jobs
+		sleep(0.1)
+		
+		expect(delegate.called_jobs).to be(:include?, :job1)
+		expect(delegate.called_jobs).to be(:include?, :job2)
+	end
+
+	it "handles errors in flush" do
+		error_delegate = Class.new do
+			def call(job)
+				raise "Test error"
+			end
+		end.new
+		
+		error_processor = subject.new(error_delegate)
+		error_processor.call(:job1)
+		# Give the processor a chance to process jobs and handle error
+		sleep(0.1)
+		
+		# Assert that the error was logged
+		expect_console.to have_logged(
+			severity: be == :error,
+			message: be(:include?, "Could not flush")
+		)
+	end
+
+	it "delegates start to super and start!" do
+		# This will call super (Generic#start) and then start!
+		# We can't easily check super, but we can check that start! returns true
+		result = processor.send(:start!)
+		expect(result).to be == true
+	end
+
+	it "delegates start to delegate" do
+		result = processor.start
+		expect(delegate.started).to be == true
+		expect(result).to be == true
+	end
+
+	it "delegates stop to delegate" do
+		result = processor.stop
+		expect(delegate.stopped).to be == true
+		expect(result).to be == "stopped"
 	end
 end

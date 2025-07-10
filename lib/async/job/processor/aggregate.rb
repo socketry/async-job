@@ -34,7 +34,7 @@ module Async
 						@delegate.call(job)
 					end
 				rescue => error
-					Console::Event::Failure.for(error).emit(self, "Could not flush #{jobs.size} jobs.")
+					Console.error(self, "Could not flush #{jobs.size} jobs.", exception: error)
 				end
 				
 				# Run the background processing loop that continuously processes job batches.

@@ -10,8 +10,8 @@ module Async
 			# This processor acts as a simple wrapper around any object that responds to call, start, and stop methods.
 			class Generic
 				# Initialize a new generic processor.
-				# @parameter delegate [Object | nil] The delegate object that will handle job execution.
-				def initialize(delegate = nil)
+				# @parameter delegate [Object] The delegate object that will handle job execution.
+				def initialize(delegate)
 					@delegate = delegate
 				end
 				
