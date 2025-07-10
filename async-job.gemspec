@@ -10,17 +10,17 @@ Gem::Specification.new do |spec|
 	spec.authors = ["Samuel Williams", "Alexey Ivanov"]
 	spec.license = "MIT"
 	
-	spec.cert_chain  = ['release.cert']
-	spec.signing_key = File.expand_path('~/.gem/release.pem')
+	spec.cert_chain  = ["release.cert"]
+	spec.signing_key = File.expand_path("~/.gem/release.pem")
 	
 	spec.metadata = {
 		"documentation_uri" => "https://socketry.github.io/async-job/",
 		"source_code_uri" => "https://github.com/socketry/async-job",
 	}
 	
-	spec.files = Dir['{lib}/**/*', '*.md', base: __dir__]
+	spec.files = Dir["{lib}/**/*", "*.md", base: __dir__]
 	
-	spec.required_ruby_version = ">= 3.1"
+	spec.required_ruby_version = ">= 3.2"
 	
 	spec.add_dependency "async", "~> 2.9"
 end

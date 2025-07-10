@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'async/queue'
+require "async/queue"
 
 module Async
 	module Job

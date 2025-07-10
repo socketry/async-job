@@ -3,10 +3,10 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative '../coder'
-require_relative 'generic'
+require_relative "../coder"
+require_relative "generic"
 
-require 'async/idler'
+require "async/idler"
 
 module Async
 	module Job

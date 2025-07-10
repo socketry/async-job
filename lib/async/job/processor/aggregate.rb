@@ -3,9 +3,9 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'generic'
+require_relative "generic"
 
-require 'console/event/failure'
+require "console/event/failure"
 
 module Async
 	module Job

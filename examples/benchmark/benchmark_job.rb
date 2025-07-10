@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'active_job'
+require "active_job"
 
 class BenchmarkJob < ActiveJob::Base
 	def perform

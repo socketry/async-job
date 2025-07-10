@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'processor/inline'
+require_relative "processor/inline"
 
 module Async
 	module Job

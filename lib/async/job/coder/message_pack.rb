@@ -3,7 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'msgpack'
+require "msgpack"
 
 module Async
 	module Job

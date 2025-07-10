@@ -4,11 +4,11 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'rails'
-require 'active_job/railtie'
+require "rails"
+require "active_job/railtie"
 ActiveJob::Base.queue_adapter = :sidekiq
 
-require_relative 'benchmark_job'
+require_relative "benchmark_job"
 
 start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 

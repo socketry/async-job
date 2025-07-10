@@ -2,6 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2024, by Alexey Ivanov.
+# Copyright, 2024, by Samuel Williams.
 
 class BaseJob
 	def initialize(id, *args, scheduled_at: nil, **kwargs)
@@ -15,8 +16,8 @@ class BaseJob
 	attr :scheduled_at
 	
 	def [](key)
-		return @id if key == 'id'
-		return @scheduled_at if key == 'scheduled_at'
+		return @id if key == "id"
+		return @scheduled_at if key == "scheduled_at"
 	end
 	
 	def to_json(*args)
@@ -32,10 +33,10 @@ class BaseJob
 	end
 	
 	def self.call(hash)
-		kwargs = hash['kwargs'].each_with_object({}) do |(k, v), memo|
+		kwargs = hash["kwargs"].each_with_object({}) do |(k, v), memo|
 			memo[k.to_sym] = v
 		end
 		
-		self.new(hash['id']).perform(*hash['args'], **kwargs)
+		self.new(hash["id"]).perform(*hash["args"], **kwargs)
 	end
 end

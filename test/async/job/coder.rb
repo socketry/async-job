@@ -3,9 +3,9 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'async/job/coder'
-require 'async/job/coder/message_pack'
-require 'async/job/coder/marshal'
+require "async/job/coder"
+require "async/job/coder/message_pack"
+require "async/job/coder/marshal"
 
 ACoder = Sus::Shared("a coder") do |object|
 	let(:coder) {subject.new}

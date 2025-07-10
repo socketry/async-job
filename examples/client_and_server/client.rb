@@ -4,12 +4,12 @@
 # Copyright, 2024, by Samuel Williams.
 # Copyright, 2024, by Alexey Ivanov.
 
-require 'async'
-require 'async/redis'
-require 'async/job'
-require_relative 'example_job'
+require "async"
+require "async/redis"
+require "async/job"
+require_relative "example_job"
 
-require 'securerandom'
+require "securerandom"
 
 Sync do
 	client = Async::Redis::Client.new

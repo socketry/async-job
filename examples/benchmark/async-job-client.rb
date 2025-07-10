@@ -4,7 +4,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require_relative 'config/environment'
+require_relative "config/environment"
 
 start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
 

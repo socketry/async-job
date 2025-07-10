@@ -3,12 +3,12 @@
 # Released under the MIT License.
 # Copyright, 2024, by Samuel Williams.
 
-require 'async'
+require "async"
 
-require 'sus/fixtures/async/reactor_context'
+require "sus/fixtures/async/reactor_context"
 
-require 'async/job/buffer'
-require 'async/job/processor/aggregate'
+require "async/job/buffer"
+require "async/job/processor/aggregate"
 
 class SlowQueue
 	def initialize(delegate = nil)
