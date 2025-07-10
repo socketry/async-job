@@ -1,0 +1,3 @@
+async-job-adapter-active_job:
+  url: https://github.com/socketry/async-job-adapter-active_job
+  command: bundle exec bake test
