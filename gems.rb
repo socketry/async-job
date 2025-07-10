@@ -7,6 +7,7 @@ source "https://rubygems.org"
 
 gemspec
 
+gem "agent-context"
 gem "activejob", ">= 7.1"
 
 group :maintenance, optional: true do
