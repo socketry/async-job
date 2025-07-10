@@ -1,10 +1,32 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2024, by Samuel Williams.
+# Copyright, 2025, by Shopify Inc.
 
 require "async/job/buffer"
 require "sus/fixtures/async/reactor_context"
+
+class Delegate
+	def initialize
+		@jobs = []
+		@started = false
+		@stopped = false
+	end
+	
+	attr_reader :jobs, :started, :stopped
+	
+	def call(job)
+		@jobs << job
+	end
+	
+	def start
+		@started = true
+	end
+	
+	def stop
+		@stopped = true
+	end
+end
 
 describe Async::Job::Buffer do
 	include Sus::Fixtures::Async::ReactorContext
@@ -50,29 +72,7 @@ describe Async::Job::Buffer do
 	end
 	
 	with "delegate" do
-		let(:delegate) do
-			Class.new do
-				def initialize
-					@jobs = []
-					@started = false
-					@stopped = false
-				end
-				
-				attr_reader :jobs, :started, :stopped
-				
-				def call(job)
-					@jobs << job
-				end
-				
-				def start
-					@started = true
-				end
-				
-				def stop
-					@stopped = true
-				end
-			end.new
-		end
+		let(:delegate) {Delegate.new}
 		
 		let(:buffer) {subject.new(delegate)}
 		
@@ -104,4 +104,4 @@ describe Async::Job::Buffer do
 			expect(buffer.pop).to be == job
 		end
 	end
-end 
+end

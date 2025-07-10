@@ -1,35 +1,35 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2024, by Samuel Williams.
+# Copyright, 2025, by Shopify Inc.
 
 require "async/job/processor/generic"
 
-describe Async::Job::Processor::Generic do
-	let(:delegate) do
-		Class.new do
-			attr_reader :called, :started, :stopped, :job
-			def initialize
-				@called = false
-				@started = false
-				@stopped = false
-				@job = nil
-			end
-			def call(job)
-				@called = true
-				@job = job
-				"result"
-			end
-			def start
-				@started = true
-				"started"
-			end
-			def stop
-				@stopped = true
-				"stopped"
-			end
-		end.new
+class Delegate
+	attr_reader :called, :started, :stopped, :job
+	def initialize
+		@called = false
+		@started = false
+		@stopped = false
+		@job = nil
 	end
+	def call(job)
+		@called = true
+		@job = job
+		"result"
+	end
+	def start
+		@started = true
+		"started"
+	end
+	def stop
+		@stopped = true
+		"stopped"
+	end
+end
+
+describe Async::Job::Processor::Generic do
+	let(:delegate) {Delegate.new}
 
 	let(:processor) {subject.new(delegate)}
 
@@ -52,4 +52,4 @@ describe Async::Job::Processor::Generic do
 		expect(delegate.stopped).to be == true
 		expect(result).to be == "stopped"
 	end
-end 
+end

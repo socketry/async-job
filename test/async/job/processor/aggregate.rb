@@ -1,37 +1,44 @@
 # frozen_string_literal: true
 
 # Released under the MIT License.
-# Copyright, 2024, by Samuel Williams.
+# Copyright, 2024-2025, by Samuel Williams.
+# Copyright, 2025, by Shopify Inc.
 
 require "async/job/processor/aggregate"
 require "sus/fixtures/async/reactor_context"
 require "sus/fixtures/console/captured_logger"
 
+class Delegate
+	attr_reader :called_jobs, :started, :stopped
+	def initialize
+		@called_jobs = []
+		@started = false
+		@stopped = false
+	end
+	def call(job)
+		@called_jobs << job
+	end
+	def start
+		@started = true
+		"started"
+	end
+	def stop
+		@stopped = true
+		"stopped"
+	end
+end
+
+class ErrorDelegate
+	def call(job)
+		raise "Test error"
+	end
+end
+
 describe Async::Job::Processor::Aggregate do
 	include Sus::Fixtures::Async::ReactorContext
 	include_context Sus::Fixtures::Console::CapturedLogger
 
-	let(:delegate) do
-		Class.new do
-			attr_reader :called_jobs, :started, :stopped
-			def initialize
-				@called_jobs = []
-				@started = false
-				@stopped = false
-			end
-			def call(job)
-				@called_jobs << job
-			end
-			def start
-				@started = true
-				"started"
-			end
-			def stop
-				@stopped = true
-				"stopped"
-			end
-		end.new
-	end
+	let(:delegate) {Delegate.new}
 
 	let(:processor) {subject.new(delegate)}
 
@@ -47,11 +54,7 @@ describe Async::Job::Processor::Aggregate do
 	end
 
 	it "handles errors in flush" do
-		error_delegate = Class.new do
-			def call(job)
-				raise "Test error"
-			end
-		end.new
+		error_delegate = ErrorDelegate.new
 		
 		error_processor = subject.new(error_delegate)
 		error_processor.call(:job1)
