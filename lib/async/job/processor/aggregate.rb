@@ -10,7 +10,13 @@ require "console/event/failure"
 module Async
 	module Job
 		module Processor
+			# Represents an aggregate processor that batches jobs for efficient processing.
+			# This processor collects jobs in a buffer and processes them in batches,
+			# reducing the overhead of individual job processing and improving throughput.
 			class Aggregate < Generic
+				# Initialize a new aggregate processor.
+				# @parameter delegate [Object] The delegate object that will handle job execution.
+				# @option parent [Async::Task] The parent task for managing the background processing (defaults to Async::Task.current).
 				def initialize(delegate, parent: nil)
 					super(delegate)
 					
@@ -21,6 +27,8 @@ module Async
 					@processing = Array.new
 				end
 				
+				# Process a batch of jobs by delegating each job to the configured delegate.
+				# @parameter jobs [Array] The array of jobs to process.
 				def flush(jobs)
 					while job = jobs.shift
 						@delegate.call(job)
@@ -29,6 +37,8 @@ module Async
 					Console::Event::Failure.for(error).emit(self, "Could not flush #{jobs.size} jobs.")
 				end
 				
+				# Run the background processing loop that continuously processes job batches.
+				# @parameter task [Async::Task] The task that manages the background processing.
 				def run(task)
 					while true
 						while @pending.empty?
@@ -45,8 +55,8 @@ module Async
 				end
 				
 				# Start the background processing task if it is not already running.
-				#
-				# @return [Boolean] true if the task was started, false if it was already running.
+				# @option parent [Async::Task] The parent task for the background processing (defaults to Async::Task.current).
+				# @returns [Boolean] True if the task was started, false if it was already running.
 				protected def start!(parent: Async::Task.current)
 					return false if @task
 					
@@ -68,20 +78,22 @@ module Async
 				end
 				
 				# Enqueue a job into the pending buffer.
-				#
 				# Start the background processing task if it is not already running.
+				# @parameter job [Object] The job to be enqueued.
 				def call(job)
 					@pending << job
 					
 					start! or @ready.signal
 				end
 				
+				# Start the processor and the background processing task.
 				def start
 					super
 					
 					self.start!
 				end
 				
+				# Stop the processor and the background processing task.
 				def stop
 					@task&.stop
 					
