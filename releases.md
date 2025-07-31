@@ -7,7 +7,6 @@
   - Improve test formatting and modernize code.
   - Achieve 100% test coverage.
   - Achieve 100% documentation coverage.
-  - Add agent context.
 
 ## v0.10.0
 
