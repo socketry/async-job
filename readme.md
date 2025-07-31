@@ -16,7 +16,67 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
 ## Releases
 
-There are no documented releases.
+Please see the [project releases](https://socketry.github.io/async-job/releases/index) for all releases.
+
+### v0.10.1
+
+  - Add release notes and modernize code.
+  - Add external tests.
+  - Improve test formatting and modernize code.
+  - Achieve 100% test coverage.
+  - Achieve 100% documentation coverage.
+  - Add agent context.
+
+### v0.10.0
+
+  - **Breaking Change**: Extract redis support into separate gem.
+  - Remove block argument from job processing as it's no longer particularly useful.
+
+### v0.9.2
+
+  - Add documentation.
+  - Revert `fail` -\> `retry` behavior.
+
+### v0.9.1
+
+  - Minor improvements.
+
+### v0.9.0
+
+  - **Breaking Change**: Reorganize processor code and add delayed processor.
+  - **Breaking Change**: Rename `queue` -\> `processor` and `pipeline` -\> `queue`.
+  - **Breaking Change**: Rename pipeline producer/consumer -\> client/server.
+  - **Breaking Change**: Rename `Backend` -\> `Queue`.
+  - Add generic backend implementation.
+  - Fix some words and reduce logging.
+
+### v0.8.0
+
+  - Add `#start`/`#stop` methods.
+
+### v0.7.1
+
+  - Minor improvements to aggregate backend.
+  - Ensure aggregate buffer shuts down gracefully (\#4).
+
+### v0.7.0
+
+  - Add aggregation backend.
+  - Add documentation regarding aggregate backend.
+  - Prefer `before do` ... in tests.
+
+### v0.6.0
+
+  - Add support for delegate pass-through.
+  - Modernize gem.
+  - Add client and server example (\#3).
+  - Fix gem name in guide.
+
+### v0.5.0
+
+  - Add benchmark example.
+  - Add support for `Async::Idler`.
+  - Add link to `async-job-adapter-active_job`.
 
 ## See Also
 
