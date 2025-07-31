@@ -37,11 +37,11 @@ end
 describe Async::Job::Processor::Aggregate do
 	include Sus::Fixtures::Async::ReactorContext
 	include_context Sus::Fixtures::Console::CapturedLogger
-
+	
 	let(:delegate) {Delegate.new}
-
+	
 	let(:processor) {subject.new(delegate)}
-
+	
 	it "processes jobs in batches" do
 		processor.call(:job1)
 		processor.call(:job2)
@@ -52,7 +52,7 @@ describe Async::Job::Processor::Aggregate do
 		expect(delegate.called_jobs).to be(:include?, :job1)
 		expect(delegate.called_jobs).to be(:include?, :job2)
 	end
-
+	
 	it "handles errors in flush" do
 		error_delegate = ErrorDelegate.new
 		
@@ -67,20 +67,20 @@ describe Async::Job::Processor::Aggregate do
 			message: be(:include?, "Could not flush")
 		)
 	end
-
+	
 	it "delegates start to super and start!" do
 		# This will call super (Generic#start) and then start!
 		# We can't easily check super, but we can check that start! returns true
 		result = processor.send(:start!)
 		expect(result).to be == true
 	end
-
+	
 	it "delegates start to delegate" do
 		result = processor.start
 		expect(delegate.started).to be == true
 		expect(result).to be == true
 	end
-
+	
 	it "delegates stop to delegate" do
 		result = processor.stop
 		expect(delegate.stopped).to be == true

@@ -30,9 +30,9 @@ end
 
 describe Async::Job::Processor::Generic do
 	let(:delegate) {Delegate.new}
-
+	
 	let(:processor) {subject.new(delegate)}
-
+	
 	it "delegates call to delegate" do
 		job = {id: 1, data: "test"}
 		result = processor.call(job)
@@ -40,13 +40,13 @@ describe Async::Job::Processor::Generic do
 		expect(delegate.job).to be == job
 		expect(result).to be == "result"
 	end
-
+	
 	it "delegates start to delegate" do
 		result = processor.start
 		expect(delegate.started).to be == true
 		expect(result).to be == "started"
 	end
-
+	
 	it "delegates stop to delegate" do
 		result = processor.stop
 		expect(delegate.stopped).to be == true

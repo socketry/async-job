@@ -14,6 +14,10 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
   - [Aggregate Queue](https://socketry.github.io/async-job/guides/aggregate-queue/index) - This guide explains how to use the Aggregate queue to reduce input latency and improve the performance of your application.
 
+## Releases
+
+There are no documented releases.
+
 ## See Also
 
   - [async-job-processor-redis](https://github.com/socketry/async-job-processor-redis) - Redis processor for `async-job` (similar to Sidekiq).

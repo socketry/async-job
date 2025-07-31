@@ -42,9 +42,9 @@ describe Async::Job::Processor::Inline do
 	include_context Sus::Fixtures::Console::CapturedLogger
 	
 	let(:delegate) {Delegate.new}
-
+	
 	let(:processor) {subject.new(delegate)}
-
+	
 	it "processes jobs asynchronously" do
 		job = {id: 1, data: "test"}
 		processor.call(job)
@@ -55,7 +55,7 @@ describe Async::Job::Processor::Inline do
 		expect(delegate.called).to be == true
 		expect(delegate.job).to be == job
 	end
-
+	
 	it "handles scheduled jobs" do
 		scheduled_time = Time.now + 0.05
 		job = {id: 1, scheduled_at: scheduled_time}
@@ -70,7 +70,7 @@ describe Async::Job::Processor::Inline do
 		# The job should have been delayed by at least 0.05 seconds
 		expect(Time.now - start_time).to be >= 0.05
 	end
-
+	
 	it "calls sleep for scheduled jobs" do
 		scheduled_time = Time.now + 0.1
 		job = {id: 1, "scheduled_at" => scheduled_time}
@@ -82,7 +82,7 @@ describe Async::Job::Processor::Inline do
 		
 		expect(delegate.called).to be == true
 	end
-
+	
 	it "handles errors in job processing" do
 		error_delegate = ErrorDelegate.new
 		
@@ -101,13 +101,13 @@ describe Async::Job::Processor::Inline do
 			message: be(:include?, "Test error")
 		)
 	end
-
+	
 	it "delegates start to delegate" do
 		result = processor.start
 		expect(delegate.started).to be == true
 		expect(result).to be == "started"
 	end
-
+	
 	it "delegates stop to delegate" do
 		result = processor.stop
 		expect(delegate.stopped).to be == true

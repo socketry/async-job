@@ -26,7 +26,7 @@ describe Async::Job::Builder do
 		
 		expect(buffer.pop).to be == "My job"
 	end
-
+	
 	it "can add dequeue middleware" do
 		buffer = Async::Job::Buffer.new
 		
@@ -40,7 +40,7 @@ describe Async::Job::Builder do
 		expect(pipeline.client).to be_a(Async::Job::Processor::Inline)
 		expect(pipeline.delegate).to be == buffer
 	end
-
+	
 	it "can set delegate using delegate method" do
 		custom_delegate = Object.new
 		
@@ -53,7 +53,7 @@ describe Async::Job::Builder do
 		expect(pipeline.client).to be == custom_delegate
 		expect(pipeline.server).to be == custom_delegate
 	end
-
+	
 	it "can build with both enqueue and dequeue middleware" do
 		buffer = Async::Job::Buffer.new
 		
@@ -68,7 +68,7 @@ describe Async::Job::Builder do
 		expect(pipeline.server).to be_a(Async::Job::Processor::Inline)
 		expect(pipeline.delegate).to be == buffer
 	end
-
+	
 	it "can build with custom delegate parameter" do
 		custom_delegate = Object.new
 		
@@ -81,7 +81,7 @@ describe Async::Job::Builder do
 		expect(pipeline.client).to be_a(Async::Job::Processor::Inline)
 		expect(pipeline.server).to be == custom_delegate
 	end
-
+	
 	it "can chain middleware methods" do
 		buffer = Async::Job::Buffer.new
 		

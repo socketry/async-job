@@ -61,7 +61,7 @@ describe Async::Job::Buffer do
 			expect(buffer.pop).to be == job2
 			expect(buffer).to be(:empty?)
 		end
-				
+		
 		it "can start without a delegate" do
 			expect{buffer.start}.not.to raise_exception
 		end

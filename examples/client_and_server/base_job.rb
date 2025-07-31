@@ -3,6 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2024, by Alexey Ivanov.
 # Copyright, 2024-2025, by Samuel Williams.
+# Copyright, 2025, by Shopify Inc.
 
 class BaseJob
 	def initialize(id, *args, scheduled_at: nil, **kwargs)

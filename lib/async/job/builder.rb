@@ -41,7 +41,7 @@ module Async
 			# @parameter middleware [Class] The middleware class to add.
 			def enqueue(middleware, ...)
 				@enqueue << ->(delegate){middleware.new(delegate, ...)}
-
+				
 				return self
 			end
 			
@@ -49,7 +49,7 @@ module Async
 			# @parameter middleware [Class] The middleware class to add.
 			def dequeue(middleware, ...)
 				@dequeue << ->(delegate){middleware.new(delegate, ...)}
-
+				
 				return self
 			end
 			
@@ -57,7 +57,7 @@ module Async
 			# @parameter delegate [Object] The delegate object.
 			def delegate(delegate)
 				@delegate = delegate
-
+				
 				return self
 			end
 			

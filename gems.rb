@@ -14,6 +14,7 @@ gem "activejob", ">= 7.1"
 group :maintenance, optional: true do
 	gem "bake-gem"
 	gem "bake-modernize"
+	gem "bake-releases"
 	
 	gem "utopia-project"
 end
@@ -22,7 +23,9 @@ group :test do
 	gem "sus"
 	gem "covered"
 	gem "decode"
+
 	gem "rubocop"
+	gem "rubocop-socketry"
 	
 	gem "sus-fixtures-async"
 	gem "sus-fixtures-console"
