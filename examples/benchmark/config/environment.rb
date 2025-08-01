@@ -7,11 +7,30 @@
 require "rails"
 require "active_job/railtie"
 require "async/job/adapter/active_job/railtie"
+require "async/job/processor/aggregate"
 require "async/job/processor/redis"
 
+# Define async-job queue for async-job adapter
 Async::Job::Adapter::ActiveJob::Railtie.define_queue "default" do
-	# enqueue Async::Job::Processor::Aggregate
+	enqueue Async::Job::Processor::Aggregate
 	dequeue Async::Job::Processor::Redis
 end
 
-require_relative "../benchmark_job"
+require "sidekiq"
+
+begin
+	require "sidekiq-pro"
+	require "sidekiq-ent"
+
+	Sidekiq::Client.reliable_push!
+
+	Sidekiq.configure_server do |config|
+		config.super_fetch!
+		config.reliable_scheduler!
+	end
+rescue LoadError
+	# Ignore.
+end
+
+require_relative "../async_job_benchmark_job"
+require_relative "../sidekiq_benchmark_job"

@@ -5,8 +5,9 @@
 # Copyright, 2024-2025, by Samuel Williams.
 # Copyright, 2025, by Shopify Inc.
 
+require_relative "config/environment"
 require "async/job/adapter/active_job/environment"
 
-service "job-server" do
+service "async-job-server" do
 	include Async::Job::Adapter::ActiveJob::Environment
 end
