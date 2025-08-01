@@ -1,0 +1,22 @@
+# SQLite database configuration for SolidQueue
+# This is a minimal setup for benchmarking purposes
+
+development: &default
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+# SolidQueue needs a separate database connection
+# You can use the same database with different connection name
+solid_queue:
+  <<: *default
+  database: db/solid_queue.sqlite3
+
+test:
+  <<: *default
+  database: db/test.sqlite3
+
+production:
+  <<: *default
+  database: db/production.sqlite3

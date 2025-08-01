@@ -19,3 +19,7 @@ gem "async-job", path: "../../"
 gem "async-job-processor-redis"
 gem "async-job-adapter-active_job"
 gem "async-service"
+
+# SolidQueue support
+gem "solid_queue"
+gem "sqlite3"

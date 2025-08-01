@@ -36,5 +36,13 @@ rescue LoadError
 	# Ignore.
 end
 
+# SolidQueue support
+begin
+	require "solid_queue"
+rescue LoadError
+	puts "SolidQueue not available - install with: gem install solid_queue"
+end
+
 require_relative "../async_job_benchmark_job"
 require_relative "../sidekiq_benchmark_job"
+require_relative "../solid_queue_benchmark_job"
