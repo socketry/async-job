@@ -7,11 +7,11 @@
 require "rails"
 require "active_job/railtie"
 require "async/job/adapter/active_job/railtie"
+require "async/job/processor/redis"
 
 Async::Job::Adapter::ActiveJob::Railtie.define_queue "default" do
-	dequeue Async::Job::Queue::Redis
+	# enqueue Async::Job::Processor::Aggregate
+	dequeue Async::Job::Processor::Redis
 end
-
-ActiveJob::Base.queue_adapter = Async::Job::Adapter::ActiveJob::Railtie.config.active_job.queue_adapter
 
 require_relative "../benchmark_job"

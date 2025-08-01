@@ -5,6 +5,7 @@
 # Copyright, 2024-2025, by Samuel Williams.
 # Copyright, 2025, by Shopify Inc.
 
+require "async"
 require_relative "config/environment"
 
 start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
