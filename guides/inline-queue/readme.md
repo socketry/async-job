@@ -8,7 +8,7 @@ The {ruby Async::Job::Queue::Inline} queue is designed to process jobs in the ba
 
 ## Usage
 
-You can use the inline quee for dequeueing and executing jobs:
+You can use the inline queue for dequeueing and executing jobs:
 
 ~~~ ruby
 pipeline = Async::Job::Builder.build(buffer) do
