@@ -1,5 +1,9 @@
 # Releases
 
+## Unreleased
+
+  - Minor code cleanup.
+
 ## v0.10.1
 
   - Add release notes and modernize code.
