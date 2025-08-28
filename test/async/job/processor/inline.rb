@@ -55,7 +55,7 @@ describe Async::Job::Processor::Inline do
 	
 	it "handles scheduled jobs" do	
 		scheduled_time = Time.now + 0.05
-		job = {id: 1, scheduled_at: scheduled_time}
+		job = {"scheduled_at" => scheduled_time}
 		
 		start_time = Time.now
 		processor.call(job).wait
