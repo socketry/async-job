@@ -1,6 +1,6 @@
 # Releases
 
-## Unreleased
+## v0.10.2
 
   - Minor code cleanup.
 

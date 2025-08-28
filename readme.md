@@ -18,6 +18,10 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
 Please see the [project releases](https://socketry.github.io/async-job/releases/index) for all releases.
 
+### v0.10.2
+
+  - Minor code cleanup.
+
 ### v0.10.1
 
   - Add release notes and modernize code.
@@ -25,7 +29,6 @@ Please see the [project releases](https://socketry.github.io/async-job/releases/
   - Improve test formatting and modernize code.
   - Achieve 100% test coverage.
   - Achieve 100% documentation coverage.
-  - Add agent context.
 
 ### v0.10.0
 
@@ -71,12 +74,6 @@ Please see the [project releases](https://socketry.github.io/async-job/releases/
   - Modernize gem.
   - Add client and server example (\#3).
   - Fix gem name in guide.
-
-### v0.5.0
-
-  - Add benchmark example.
-  - Add support for `Async::Idler`.
-  - Add link to `async-job-adapter-active_job`.
 
 ## See Also
 

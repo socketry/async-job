@@ -1,0 +1,20 @@
+# Automatically generated context index for Utopia::Project guides.
+# Do not edit then files in this directory directly, instead edit the guides and then run `bake utopia:project:agent:context:update`.
+---
+description: An asynchronous job queue for Ruby.
+metadata:
+  documentation_uri: https://socketry.github.io/async-job/
+  source_code_uri: https://github.com/socketry/async-job
+files:
+- path: getting-started.md
+  title: Getting Started
+  description: This guide gives you an overview of the `async-job` gem and explains
+    the core concepts.
+- path: inline-queue.md
+  title: Inline Queue
+  description: This guide explains how to use the Inline queue to execute background
+    jobs.
+- path: aggregate-queue.md
+  title: Aggregate Queue
+  description: This guide explains how to use the Aggregate queue to reduce input
+    latency and improve the performance of your application.
