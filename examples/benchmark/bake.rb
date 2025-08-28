@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Released under the MIT License.
+# Copyright, 2025, by Samuel Williams.
 
 def performance_log_rate
 	File.open("performance.log", "r") do |file|

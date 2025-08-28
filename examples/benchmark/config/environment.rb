@@ -25,9 +25,9 @@ require "sidekiq"
 begin
 	require "sidekiq-pro"
 	require "sidekiq-ent"
-
+	
 	Sidekiq::Client.reliable_push!
-
+	
 	Sidekiq.configure_server do |config|
 		config.super_fetch!
 		config.reliable_scheduler!
