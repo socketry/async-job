@@ -46,9 +46,6 @@ describe Async::Job::Processor::Aggregate do
 		processor.call(:job1)
 		processor.call(:job2)
 		
-		# Give the processor a chance to process jobs
-		sleep(0.1)
-		
 		expect(delegate.called_jobs).to be(:include?, :job1)
 		expect(delegate.called_jobs).to be(:include?, :job2)
 	end
@@ -58,8 +55,6 @@ describe Async::Job::Processor::Aggregate do
 		
 		error_processor = subject.new(error_delegate)
 		error_processor.call(:job1)
-		# Give the processor a chance to process jobs and handle error
-		sleep(0.1)
 		
 		# Assert that the error was logged
 		expect_console.to have_logged(

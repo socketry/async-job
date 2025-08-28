@@ -23,7 +23,13 @@ module Async
 					super(delegate)
 					
 					@parent = parent || Async::Idler.new
+					
+					@call_count = 0
+					@complete_count = 0
 				end
+				
+				# @attribute [Integer] The count of completed jobs.
+				attr_reader :complete_count
 				
 				# Process a job asynchronously with optional scheduling.
 				# If the job has a scheduled_at time, the processor will wait until that time before execution.
@@ -36,7 +42,9 @@ module Async
 							sleep(scheduled_at - Time.now)
 						end
 						
+						@call_count += 1
 						@delegate.call(job)
+						@complete_count += 1
 					rescue => error
 						Console.error(self, error)
 					end
@@ -50,6 +58,13 @@ module Async
 				# Stop the processor by delegating to the configured delegate.
 				def stop
 					@delegate.stop
+				end
+				
+				# Returns statistics about the processor's job counts.
+				#
+				# - `c`: call count / completed count.
+				def statistics
+					{c: [@call_count, @complete_count]}
 				end
 			end
 		end

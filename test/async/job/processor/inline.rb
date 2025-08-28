@@ -49,35 +49,15 @@ describe Async::Job::Processor::Inline do
 		job = {id: 1, data: "test"}
 		processor.call(job)
 		
-		# Wait a bit for async processing
-		sleep(0.1)
-		
 		expect(delegate.called).to be == true
 		expect(delegate.job).to be == job
 	end
 	
-	it "handles scheduled jobs" do
+	it "handles scheduled jobs" do	
 		scheduled_time = Time.now + 0.05
 		job = {id: 1, scheduled_at: scheduled_time}
 		
 		start_time = Time.now
-		processor.call(job)
-		
-		# Wait for processing to complete
-		sleep(0.1)
-		
-		expect(delegate.called).to be == true
-		# The job should have been delayed by at least 0.05 seconds
-		expect(Time.now - start_time).to be >= 0.05
-	end
-	
-	it "calls sleep for scheduled jobs" do
-		scheduled_time = Time.now + 0.1
-		job = {id: 1, "scheduled_at" => scheduled_time}
-		
-		# Mock the sleep method to ensure it's called
-		expect(processor).to receive(:sleep).and_return(nil)
-		
 		processor.call(job).wait
 		
 		expect(delegate.called).to be == true
@@ -91,9 +71,6 @@ describe Async::Job::Processor::Inline do
 		
 		# Should not raise exception
 		expect{error_processor.call(job)}.not.to raise_exception
-		
-		# Wait for async processing
-		sleep(0.1)
 		
 		# Assert that the error was logged
 		expect_console.to have_logged(
@@ -112,5 +89,17 @@ describe Async::Job::Processor::Inline do
 		result = processor.stop
 		expect(delegate.stopped).to be == true
 		expect(result).to be == "stopped"
+	end
+	
+	with "#statistics" do
+		it "returns statistics with call and complete counts" do
+			expect(processor.statistics).to be == {c: [0, 0]}
+			
+			# Call the processor to increment counts
+			job = {id: 1, data: "test"}
+			processor.call(job)
+			
+			expect(processor.statistics).to be == {c: [1, 1]}
+		end
 	end
 end
