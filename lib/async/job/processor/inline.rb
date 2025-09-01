@@ -8,6 +8,7 @@ require_relative "../coder"
 require_relative "generic"
 
 require "async/idler"
+require "string/format"
 
 module Async
 	module Job
@@ -26,10 +27,17 @@ module Async
 					
 					@call_count = 0
 					@complete_count = 0
+					@failed_count = 0
 				end
+				
+				# @attribute [Integer] The current number of in-progress jobs.
+				attr_reader :call_count
 				
 				# @attribute [Integer] The count of completed jobs.
 				attr_reader :complete_count
+				
+				# @attribute [Integer] The count of failed jobs.
+				attr_reader :failed_count
 				
 				# Process a job asynchronously with optional scheduling.
 				# If the job has a scheduled_at time, the processor will wait until that time before execution.
@@ -46,7 +54,10 @@ module Async
 						@delegate.call(job)
 						@complete_count += 1
 					rescue => error
+						@failed_count += 1
 						Console.error(self, error)
+					ensure
+						@call_count -= 1
 					end
 				end
 				
@@ -63,8 +74,8 @@ module Async
 				# Returns statistics about the processor's job counts.
 				#
 				# - `c`: call count / completed count.
-				def statistics
-					{c: [@call_count, @complete_count]}
+				def status_string
+					"C=#{String::Format.count(@call_count)}/#{String::Format.count(@complete_count)} F=#{String::Format.count(@failed_count)}"
 				end
 			end
 		end

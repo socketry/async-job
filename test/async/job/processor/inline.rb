@@ -91,15 +91,15 @@ describe Async::Job::Processor::Inline do
 		expect(result).to be == "stopped"
 	end
 	
-	with "#statistics" do
-		it "returns statistics with call and complete counts" do
-			expect(processor.statistics).to be == {c: [0, 0]}
+	with "#status_string" do
+		it "returns status string with call and complete counts" do
+			expect(processor.status_string).to be == "C=0/0 F=0"
 			
 			# Call the processor to increment counts
 			job = {id: 1, data: "test"}
 			processor.call(job)
 			
-			expect(processor.statistics).to be == {c: [1, 1]}
+			expect(processor.status_string).to be == "C=0/1 F=0"
 		end
 	end
 end
