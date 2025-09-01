@@ -1,9 +1,9 @@
 # Releases
 
-## Unreleased
+## v0.11.0
 
-  - Use `String::Format` for formatting strings and restore {ruby Async::Job::Processor::Inline#status_string}.
-	- Add failed count to inline processor.
+  - Use `String::Format` for formatting strings and restore {ruby Async::Job::Processor::Inline\#status\_string}.
+      - Add failed count to inline processor.
 
 ## v0.10.2
 

@@ -18,6 +18,11 @@ Please see the [project documentation](https://socketry.github.io/async-job/) fo
 
 Please see the [project releases](https://socketry.github.io/async-job/releases/index) for all releases.
 
+### v0.11.0
+
+  - Use `String::Format` for formatting strings and restore <code class="language-ruby">Async::Job::Processor::Inline\#status\_string</code>.
+      - Add failed count to inline processor.
+
 ### v0.10.2
 
   - Minor code cleanup.
@@ -67,13 +72,6 @@ Please see the [project releases](https://socketry.github.io/async-job/releases/
   - Add aggregation backend.
   - Add documentation regarding aggregate backend.
   - Prefer `before do` ... in tests.
-
-### v0.6.0
-
-  - Add support for delegate pass-through.
-  - Modernize gem.
-  - Add client and server example (\#3).
-  - Fix gem name in guide.
 
 ## See Also
 
