@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
 		"source_code_uri" => "https://github.com/socketry/async-job",
 	}
 	
-	spec.files = Dir["{lib}/**/*", "*.md", base: __dir__]
+	spec.files = Dir["{context,lib}/**/*", "*.md", base: __dir__]
 	
 	spec.required_ruby_version = ">= 3.2"
 	

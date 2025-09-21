@@ -44,9 +44,9 @@ sequenceDiagram
 You can use {ruby Async::Job::Builder} to create a pipeline that includes both the producer and consumer sides of a queue:
 
 ```ruby
-require 'async'
-require 'async/job'
-require 'async/job/processor/inline'
+require "async"
+require "async/job"
+require "async/job/processor/inline"
 
 # This is how we execute a job from the queue:
 executor = proc do |job|
